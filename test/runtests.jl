@@ -1,5 +1,7 @@
 using Profiles
+using Plots
 using Base.Test
 
-# write your own tests here
-@test 1 == 1
+unicodeplots()
+T = 10 * rand(25, 3)
+performance_profile(T, labels=["a", "b", "c"], title="Test Profile")

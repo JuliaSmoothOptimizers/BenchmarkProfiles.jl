@@ -1,5 +1,10 @@
 module Profiles
 
-# package code goes here
+import Plots
 
-end # module
+export performance_ratios, performance_profile
+
+include("performance_profiles.jl")
+include("data_profiles.jl")
+
+end
