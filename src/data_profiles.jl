@@ -48,8 +48,8 @@ The 3-dimensional array `H` gives the performance data for each solver
 and each problem (smaller is better). `H[k,p,s]` is the `k`-th costly
 operation (e.g., function evaluation) for problem `p` and solver `s`.
 
-The vector `N` gives a scaling associated to each problem. If function
-evaluations or gradients are being measured, `N[p]` should be `n(p) + 1`
+The vector `N` gives a scaling associated to each problem. If the number
+of simplex gradients is being measured, `N[p]` should be `n(p) + 1`
 where `n(p)` is the number of variables of problem `p`.
 
 The threshold `τ` determines the tolerance in the convergence criterion
