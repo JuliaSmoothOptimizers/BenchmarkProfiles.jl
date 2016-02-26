@@ -12,6 +12,8 @@ See the documentation of `data_profile()` for more information.
 function data_ratios(H :: Array{Float64,3}, N :: Vector{Float64}; τ :: Float64=1.0e-3)
 
   (nf, np, ns) = size(H)
+  H[isinf(H)] = NaN;
+  H[H .< 0] = NaN;
   for j = 1 : ns
     for i = 2 : nf
       H[i, :, j] = min(H[i, :, j], H[i-1, :, j])
@@ -47,6 +49,8 @@ data_ratios{TH <: Number, TN <: Number, Tt <: Number}(H :: Array{TH,3}, N :: Vec
 The 3-dimensional array `H` gives the performance data for each solver
 and each problem (smaller is better). `H[k,p,s]` is the `k`-th costly
 operation (e.g., function evaluation) for problem `p` and solver `s`.
+Failures on a given problem are represented by a negative value, an
+infinite value, or `NaN`.
 
 The vector `N` gives a scaling associated to each problem. If the number
 of simplex gradients is being measured, `N[p]` should be `n(p) + 1`
