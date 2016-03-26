@@ -64,11 +64,11 @@ where for each problem f(x) is a measure recorded (e.g., the objective
 value), f0 is the measure at the initial point, and fL is the best measure
 obtained by any solver.
 """
-function data_profile(H :: Array{Float64,3}, N :: Vector{Float64};
+function data_profile(H :: Array{Float64,3}, N :: Vector{Float64},
+                      labels :: Vector{AbstractString}=AbstractString[];
                       τ :: Float64=1.0e-3,
-                      operations :: ASCIIString="function evaluations",
-                      labels :: Array{ASCIIString}=ASCIIString[],
-                      title :: ASCIIString="")
+                      operations :: AbstractString="function evaluations",
+                      title :: AbstractString="")
 
   (T, max_data) = data_ratios(H, N, τ=τ)
   (np, ns) = size(T)
@@ -86,5 +86,5 @@ function data_profile(H :: Array{Float64,3}, N :: Vector{Float64};
   return profile
 end
 
-data_profile{TH <: Number, TN <: Number}(H :: Array{TH,3}, N :: Vector{TN}; args...) =
-  data_profile(convert(Array{Float64,3}, H), convert(Vector{Float64}, N); args...)
+data_profile{TH <: Number, TN <: Number, S <: AbstractString}(H :: Array{TH,3}, N :: Vector{TN}, labels :: Vector{S}; kwargs...) =
+  data_profile(convert(Array{Float64,3}, H), convert(Vector{Float64}, N), convert(Vector{AbstractString}, labels); kwargs...)

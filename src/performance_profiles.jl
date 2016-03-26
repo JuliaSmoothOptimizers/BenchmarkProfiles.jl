@@ -44,10 +44,9 @@ negative value, an infinite value, or `NaN`.
 The optional argument `logscale` is used to produce a logarithmic (base 2)
 performance plot.
 """
-function performance_profile(T :: Array{Float64,2};
+function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractString};
                              logscale :: Bool=true,
-                             labels :: Array{ASCIIString}=ASCIIString[],
-                             title :: ASCIIString="")
+                             title :: AbstractString="")
 
   (ratios, max_ratio) = performance_ratios(T, logscale=logscale)
   (np, ns) = size(ratios)
@@ -66,4 +65,5 @@ function performance_profile(T :: Array{Float64,2};
   return profile
 end
 
-performance_profile{Tn <: Number}(T :: Array{Tn,2}; args...) = performance_profile(convert(Array{Float64,2}, T); args...)
+performance_profile{Tn <: Number, S <: AbstractString}(T :: Array{Tn,2}, labels :: Vector{S}; kwargs...) =
+  performance_profile(convert(Array{Float64,2}, T), convert(Vector{AbstractString}, labels); kwargs...)
