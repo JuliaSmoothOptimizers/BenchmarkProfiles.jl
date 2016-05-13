@@ -3,6 +3,8 @@
 A simple [Julia](http://julialang.org) package to plot performance and data profiles.
 
 [![Build Status](https://travis-ci.org/JuliaOptimizers/Profiles.jl.svg?branch=master)](https://travis-ci.org/JuliaOptimizers/Profiles.jl)
+[![Build status](https://ci.appveyor.com/api/projects/status/u6ycjl8rfatjnofk/branch/master?svg=true)](https://ci.appveyor.com/project/dpo/profiles-jl/branch/master)
+
 
 Plotting is handled by [`Plots.jl`](https://github.com/tbreloff/Plots.jl) so the user can choose among several available plotting backends.
 
