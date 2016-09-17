@@ -53,7 +53,7 @@ function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractStr
 
   xs = [1:np;] / np
   length(labels) == 0 && (labels = [@sprintf("column %d", col) for col = 1 : ns])
-  profile = Plots.plot()  # initial empty plot
+  profile = Plots.plot(reuse=false)  # initial empty plot
   for s = 1 : ns
     Plots.plot!(ratios[:, s], xs, t=:steppre, label=labels[s])
   end
