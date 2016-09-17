@@ -68,13 +68,14 @@ function data_profile(H :: Array{Float64,3}, N :: Vector{Float64},
                       labels :: Vector{AbstractString}=AbstractString[];
                       τ :: Float64=1.0e-3,
                       operations :: AbstractString="function evaluations",
-                      title :: AbstractString="")
+                      title :: AbstractString="",
+                      kwargs...)
 
   (T, max_data) = data_ratios(H, N, τ=τ)
   (np, ns) = size(T)
   xs = [1:np;] / np
   length(labels) == 0 && (labels = [@sprintf("column %d", col) for col = 1 : ns])
-  profile = Plots.plot(reuse=false)  # initial empty plot
+  profile = Plots.plot(; kwargs...)  # initial empty plot
   for s = 1 : ns
     Plots.plot!(T[:, s], xs, t=:steppre, label=labels[s])
   end

@@ -46,7 +46,8 @@ performance plot.
 """
 function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractString};
                              logscale :: Bool=true,
-                             title :: AbstractString="")
+                             title :: AbstractString="",
+                             kwargs...)
 
   (ratios, max_ratio) = performance_ratios(T, logscale=logscale)
   (np, ns) = size(ratios)
@@ -54,7 +55,7 @@ function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractStr
   ratios = [ratios; 2.0 * max_ratio * ones(1, ns)]
   xs = [1:np+1;] / (np+1)
   length(labels) == 0 && (labels = [@sprintf("column %d", col) for col = 1 : ns])
-  profile = Plots.plot(reuse=false)  # initial empty plot
+  profile = Plots.plot(; kwargs...)  # initial empty plot
   for s = 1 : ns
     Plots.plot!(ratios[:, s], xs, t=:steppre, label=labels[s])
   end
