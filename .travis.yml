@@ -8,9 +8,13 @@ julia:
   - release
   - nightly
 
+branches:
+  only:
+    - master
+
 notifications:
   email: false
 
 script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi 
-  - julia -e 'Pkg.clone(pwd()); Pkg.build("Profiles"); Pkg.checkout("Plots", "dev"); Pkg.test("Profiles"; coverage=true)'
+  - julia -e 'Pkg.clone(pwd()); Pkg.build("Profiles"); Pkg.test("Profiles"; coverage=true)'
