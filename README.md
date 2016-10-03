@@ -15,7 +15,7 @@ Watch out for the [pitfalls](http://purl.org/net/epubs/manifestation/20477017) o
 ```julia
 julia> using Profiles
 julia> T = 10 * rand(25,3);  # 25 problems, 3 solvers
-julia> performance_profile(T, labels=["Solver 1", "Solver 2", "Solver 3"], title="Celebrity Deathmatch")
+julia> performance_profile(T, ["Solver 1", "Solver 2", "Solver 3"], title="Celebrity Deathmatch")
 ```
 
 ## References
