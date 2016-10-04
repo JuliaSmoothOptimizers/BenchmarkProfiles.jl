@@ -1,9 +1,10 @@
-# Profiles
+# BenchmarkProfiles
 
 A simple [Julia](http://julialang.org) package to plot performance and data profiles.
 
-[![Build Status](https://travis-ci.org/JuliaSmoothOptimizers/Profiles.jl.svg?branch=master)](https://travis-ci.org/JuliaSmoothOptimizers/Profiles.jl)
-[![Build status](https://ci.appveyor.com/api/projects/status/u6ycjl8rfatjnofk/branch/master?svg=true)](https://ci.appveyor.com/project/JuliaSmoothOptimizers/profiles-jl/branch/master)
+[![Build Status](https://travis-ci.org/JuliaSmoothOptimizers/BenchmarkProfiles.jl.svg?branch=master)](https://travis-ci.org/JuliaSmoothOptimizers/BenchmarkProfiles.jl)
+[![Build status](https://ci.appveyor.com/api/projects/status/pf5isj3gi53uj9vp/branch/master?svg=true)](https://ci.appveyor.com/project/dpo/benchmarkprofiles-jl/branch/master)
+
 
 
 Plotting is handled by [`Plots.jl`](https://github.com/tbreloff/Plots.jl) so the user can choose among several available plotting backends.
@@ -13,7 +14,7 @@ Watch out for the [pitfalls](http://purl.org/net/epubs/manifestation/20477017) o
 ## Example
 
 ```julia
-julia> using Profiles
+julia> using BenchmarkProfiles
 julia> T = 10 * rand(25,3);  # 25 problems, 3 solvers
 julia> performance_profile(T, ["Solver 1", "Solver 2", "Solver 3"], title="Celebrity Deathmatch")
 ```

@@ -1,4 +1,4 @@
-using Profiles
+using BenchmarkProfiles
 using Plots
 using Base.Test
 

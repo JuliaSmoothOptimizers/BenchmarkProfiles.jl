@@ -30,7 +30,7 @@ build_script:
 # Need to convert from shallow to complete for Pkg.clone to work
   - IF EXIST .git\shallow (git fetch --unshallow)
   - C:\projects\julia\bin\julia -e "versioninfo();
-      Pkg.clone(pwd(), \"Profiles\"); Pkg.build(\"Profiles\")"
+      Pkg.clone(pwd(), \"BenchmarkProfiles\"); Pkg.build(\"BenchmarkProfiles\")"
 
 test_script:
-  - C:\projects\julia\bin\julia --check-bounds=yes -e "Pkg.test(\"Profiles\")"
+  - C:\projects\julia\bin\julia --check-bounds=yes -e "Pkg.test(\"BenchmarkProfiles\")"
