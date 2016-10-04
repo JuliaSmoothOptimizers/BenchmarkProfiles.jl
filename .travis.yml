@@ -16,5 +16,5 @@ notifications:
   email: false
 
 script:
-  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi 
-  - julia -e 'Pkg.clone(pwd()); Pkg.build("Profiles"); Pkg.test("Profiles"; coverage=true)'
+  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+  - julia -e 'Pkg.clone(pwd()); Pkg.build("BenchmarkProfiles"); Pkg.test("BenchmarkProfiles"; coverage=true)'

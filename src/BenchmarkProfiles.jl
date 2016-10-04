@@ -1,4 +1,4 @@
-module Profiles
+module BenchmarkProfiles
 
 import Plots
 

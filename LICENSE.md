@@ -1,4 +1,4 @@
-The Profiles.jl package is licensed under the MIT "Expat" License:
+The BenchmarkProfiles.jl package is licensed under the MIT "Expat" License:
 
 > Copyright (c) 2016: Dominique Orban.
 >
