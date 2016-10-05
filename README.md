@@ -10,7 +10,7 @@ See http://www.mcs.anl.gov/~wild/dfo/benchmarking.
 
 Plotting is handled by [`Plots.jl`](https://github.com/tbreloff/Plots.jl) so the user can choose among several available plotting backends.
 
-Watch out for the [pitfalls](http://purl.org/net/epubs/manifestation/20477017) of profiles!
+Watch out for the [pitfalls](http://dl.acm.org/citation.cfm?id=2950048) of profiles!
 
 ## Example
 
