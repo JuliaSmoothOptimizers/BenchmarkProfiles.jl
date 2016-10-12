@@ -1,0 +1,164 @@
+Return-Path: wild@anl.gov
+Received: from courriel01.gerad.ca (LHLO courriel01.gerad.ca)
+ (132.204.100.227) by courriel01.gerad.ca with LMTP; Wed, 5 Oct 2016
+ 05:52:20 -0400 (EDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by courriel01.gerad.ca (Postfix) with ESMTP id 4A5EDFE022C
+	for <dominique.orban@gerad.ca>; Wed,  5 Oct 2016 05:52:20 -0400 (EDT)
+X-Virus-Scanned: amavisd-new at gerad.ca
+X-Spam-Flag: NO
+X-Spam-Score: -4.22
+X-Spam-Level:
+X-Spam-Status: No, score=-4.22 tagged_above=-10 required=6.6
+	tests=[BAYES_00=-1.9, RCVD_IN_DNSWL_MED=-2.3, RCVD_IN_MSPIKE_H3=-0.01,
+	RCVD_IN_MSPIKE_WL=-0.01] autolearn=ham autolearn_force=no
+Received: from courriel01.gerad.ca ([127.0.0.1])
+	by localhost (courriel01.gerad.ca [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id M6CpZIrhcUQn for <dominique.orban@gerad.ca>;
+	Wed,  5 Oct 2016 05:52:18 -0400 (EDT)
+Received: from platane.dit.umontreal.ca (platane.dit.umontreal.ca [132.204.246.26])
+	by courriel01.gerad.ca (Postfix) with ESMTP id 6AA6DFE020F
+	for <dominique.orban@gerad.ca>; Wed,  5 Oct 2016 05:52:18 -0400 (EDT)
+Received: from smtps2.umontreal.ca (smtps2.umontreal.ca [208.72.177.121])
+	by platane.dit.umontreal.ca (8.14.7/8.14.1) with ESMTP id u959qHap014400
+	for <dominique.orban@gerad.ca>; Wed, 5 Oct 2016 05:52:17 -0400
+X-ASG-Debug-ID: 1475661126-08caa94c9db8a60001-NlfEf0
+Received: from mailrelay.anl.gov (mailrelay.anl.gov [130.202.101.22]) by smtps2.umontreal.ca with ESMTP id Lj2ZyDV64owGb2II for <dominique.orban@gerad.ca>; Wed, 05 Oct 2016 05:52:06 -0400 (EDT)
+X-Barracuda-Envelope-From: wild@anl.gov
+X-Barracuda-Effective-Source-IP: mailrelay.anl.gov[130.202.101.22]
+X-Barracuda-Apparent-Source-IP: 130.202.101.22
+Received: from mailgateway.anl.gov (mailgateway.anl.gov [130.202.101.28])
+	(using TLSv1.2 with cipher RC4-SHA (128/128 bits))
+	(No client certificate requested)
+	by mailrelay.anl.gov (Postfix) with ESMTPS id 4FC44200034
+	for <dominique.orban@gerad.ca>; Wed,  5 Oct 2016 04:52:06 -0500 (CDT)
+X-IronPort-AV: E=Sophos;i="5.31,448,1473138000"; 
+   d="scan'208";a="132239731"
+Received: from hybrid-george.anl.gov (HELO GEORGE.anl.gov) ([146.137.81.15])
+  by mailgateway.anl.gov with ESMTP/TLS/AES256-SHA; 05 Oct 2016 04:52:06 -0500
+Received: from BUTKUS.anl.gov ([fe80::a818:5e68:956f:50f9]) by GEORGE.anl.gov
+ ([::1]) with mapi id 14.03.0266.001; Wed, 5 Oct 2016 04:52:06 -0500
+From: "Wild, Stefan M." <wild@anl.gov>
+To: Orban Dominique <dominique.orban@gerad.ca>
+Subject: RE: Performance/data profile code
+Thread-Topic: Performance/data profile code
+X-ASG-Orig-Subj: RE: Performance/data profile code
+Thread-Index: AQHSHpQCfZ7cqr5FRUSy7kYC8M0tpqCZCbMAgACDgoCAABDyhQ==
+Date: Wed, 5 Oct 2016 09:52:06 +0000
+Message-ID: <3C28093C302C8841BC24A965850D37418CBA64E3@BUTKUS.anl.gov>
+References: <8337C935-3819-485E-A7BF-1172F3E73C4B@gerad.ca>
+ <e509a18c-f58f-bafa-8b25-c6949ef12022@anl.gov>,<88225A7F-4E52-400E-8E64-1521D303EDD2@gerad.ca>
+In-Reply-To: <88225A7F-4E52-400E-8E64-1521D303EDD2@gerad.ca>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-originating-ip: [146.137.81.42]
+Content-Type: text/plain; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-Barracuda-Connect: mailrelay.anl.gov[130.202.101.22]
+X-Barracuda-Start-Time: 1475661126
+X-Barracuda-URL: https://208.72.177.121:8080/cgi-mod/mark.cgi
+X-Barracuda-Scan-Msg-Size: 2408
+X-Virus-Scanned: by bsmtpd at umontreal.ca
+X-Barracuda-Malware-Scanned: by bsmtpd at umontreal.ca
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.5130 1.0000 0.7500
+X-Barracuda-Spam-Score: 0.75
+X-Barracuda-Spam-Status: No, SCORE=0.75 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=6.1 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.33487
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------------------------
+X-NAI-Spam-Flag: NO
+X-NAI-Spam-Level: 
+X-NAI-Spam-Threshold: 5
+X-NAI-Spam-Score: 0.5
+X-NAI-Spam-Rules: 2 Rules triggered
+	SBJ_DRGSX=0.5, RV5817=0
+X-NAI-Spam-Version: 2.3.0.9418 : core <5817> : inlines <5321> : streams
+ <1711375> : uri <2301852>
+
+Dominique, yes, of course I am ok with this. If it helps you, we can slap a=
+ BSD license (what we typically use) on the Matlab source.
+
+Stefan
+--
+http://www.mcs.anl.gov/~wild
+________________________________________
+From: Orban Dominique [dominique.orban@gerad.ca]
+Sent: Tuesday, October 04, 2016 10:48 PM
+To: Wild, Stefan M.
+Subject: Re: Performance/data profile code
+
+Done! I added a link to your page and updated the link to the pitfalls pape=
+r. Thanks.
+
+Is there any chance you would put a license on your original code? I=92m no=
+t seeing any. I tentatively put the MIT =93expat=94 license on my translati=
+on but I want to be sure we agree on things.
+
+At least, I=92d need a sentence from you saying that you=92re ok with me di=
+stributing the Julia translation :-).
+
+Cheers!
+
+Dominique
+www.gerad.ca/~orban
+
+
+On Oct 4, 2016, at 20:57, Stefan Wild <wild@anl.gov> wrote:
+
+> Salut Dominique,
+>
+> Cool!
+> Sounds good, I'll add to the github link below to our main page,
+> http://www.mcs.anl.gov/~wild/dfo/benchmarking/
+> which I have been meaning to update (the old page
+> http://www.mcs.anl.gov/~more/dfo/
+> should eventually just splash to the page above).
+>
+> A small request: in either your readme or license, can you add a pointer =
+to
+> http://www.mcs.anl.gov/~wild/dfo/benchmarking/
+> ?
+> Just today I was in a meeting with the Argonne attorneys who reminded me =
+we should do whatever we can so that an eventual user can see that this is =
+open-source/pointed back to Argonne.
+>
+> Hope all is well in Montreal,
+> Stefan
+>
+> PS- You should update your link to the new version of Gould and Scott:
+> http://dl.acm.org/citation.cfm?id=3D2950048
+>
+>
+>
+>
+> On 2016-10-04 06:06 PM, Orban Dominique wrote:
+>> Bonjour Stefan,
+>>
+>> I=92m working with the Julia language these days and I wrote what=92s es=
+sentially a translation of your Matlab code for performance and data profil=
+es:
+>>
+>> https://github.com/JuliaSmoothOptimizers/BenchmarkProfiles.jl
+>>
+>> I=92d like to distribute it so users can install it easily but I=92d lik=
+e your blessing that it=92s ok because I didn=92t see any license with your=
+ code. I don=92t want DOE to get all antsy about it. Feel free to forward t=
+he request to Jorge for his approval if necessary.
+>>
+>> Hope all is well!
+>>
+>> Cheers,
+>>
+>> Dominique
+>> www.gerad.ca/~orban
+>>
+
+
+
+
+

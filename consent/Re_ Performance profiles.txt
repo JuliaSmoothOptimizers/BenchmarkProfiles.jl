@@ -1,0 +1,52 @@
+From: Jorge Moré <more@anl.gov>
+Subject: Re: Performance profiles
+Date: October 11, 2016 at 23:02:10 GMT-4
+To: Orban Dominique <dominique.orban@gerad.ca>
+
+Hi Dominique,
+
+By all means distribute the Julia version.
+
+I did see the similar message that you sent to Stefan.
+Please follow the suggestions of Stefan.
+In particular, point to
+
+http://www.mcs.anl.gov/~wild/dfo/benchmarking/ 
+
+The code that Stefan and I wrote is different from the
+original that I wrote with Liz Dolan.
+Not sure which one you are making available, but
+that is up to you and Stefan.
+
+Cheers,
+
+Jorge
+
+ps. I did try to take a peek at the "note on performance profiles"
+but my vpn to Chicago did not work tonight, so I could not get
+a copy. If you have a copy handy, please send it to me.
+
+
+
+Orban Dominique October 5, 2016 at 6:45 AM
+Dear Jorge,
+
+I’m working with the Julia language these days and I wrote what’s essentially a translation of your original Matlab code for performance and data profiles:
+
+https://github.com/JuliaSmoothOptimizers/BenchmarkProfiles.jl
+
+I’d like to distribute it so users can install it easily but I’d like your blessing that it’s ok because I didn’t see any license with your code. I don’t want DOE to get antsy about it.
+
+Thanks in advance.
+
+I hope all is well.
+
+Best,
+
+Dominique
+www.gerad.ca/~orban
+
+
+
+
+
