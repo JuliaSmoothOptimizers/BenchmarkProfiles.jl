@@ -1,0 +1,74 @@
+From: "Wild, Stefan M." <wild@anl.gov>
+Subject: RE: Performance/data profile code
+Date: October 5, 2016 at 5:52:06 GMT-4
+To: Orban Dominique <dominique.orban@gerad.ca>
+
+Dominique, yes, of course I am ok with this. If it helps you, we can slap a BSD license (what we typically use) on the Matlab source.
+
+Stefan
+--
+http://www.mcs.anl.gov/~wild
+________________________________________
+From: Orban Dominique [dominique.orban@gerad.ca]
+Sent: Tuesday, October 04, 2016 10:48 PM
+To: Wild, Stefan M.
+Subject: Re: Performance/data profile code
+
+Done! I added a link to your page and updated the link to the pitfalls paper. Thanks.
+
+Is there any chance you would put a license on your original code? I’m not seeing any. I tentatively put the MIT “expat” license on my translation but I want to be sure we agree on things.
+
+At least, I’d need a sentence from you saying that you’re ok with me distributing the Julia translation :-).
+
+Cheers!
+
+Dominique
+www.gerad.ca/~orban
+
+
+On Oct 4, 2016, at 20:57, Stefan Wild <wild@anl.gov> wrote:
+
+Salut Dominique,
+
+Cool!
+Sounds good, I'll add to the github link below to our main page,
+http://www.mcs.anl.gov/~wild/dfo/benchmarking/
+which I have been meaning to update (the old page
+http://www.mcs.anl.gov/~more/dfo/
+should eventually just splash to the page above).
+
+A small request: in either your readme or license, can you add a pointer to
+http://www.mcs.anl.gov/~wild/dfo/benchmarking/
+?
+Just today I was in a meeting with the Argonne attorneys who reminded me we should do whatever we can so that an eventual user can see that this is open-source/pointed back to Argonne.
+
+Hope all is well in Montreal,
+Stefan
+
+PS- You should update your link to the new version of Gould and Scott:
+http://dl.acm.org/citation.cfm?id=2950048
+
+
+
+
+On 2016-10-04 06:06 PM, Orban Dominique wrote:
+Bonjour Stefan,
+
+I’m working with the Julia language these days and I wrote what’s essentially a translation of your Matlab code for performance and data profiles:
+
+https://github.com/JuliaSmoothOptimizers/BenchmarkProfiles.jl
+
+I’d like to distribute it so users can install it easily but I’d like your blessing that it’s ok because I didn’t see any license with your code. I don’t want DOE to get all antsy about it. Feel free to forward the request to Jorge for his approval if necessary.
+
+Hope all is well!
+
+Cheers,
+
+Dominique
+www.gerad.ca/~orban
+
+
+
+
+
+
