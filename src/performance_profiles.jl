@@ -53,11 +53,11 @@ function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractStr
   (np, ns) = size(ratios)
 
   ratios = [ratios; 2.0 * max_ratio * ones(1, ns)]
-  xs = [1:np+1;] / (np+1)
+  xs = [1:np+1;] / np
   length(labels) == 0 && (labels = [@sprintf("column %d", col) for col = 1 : ns])
   profile = Plots.plot(; kwargs...)  # initial empty plot
   for s = 1 : ns
-    Plots.plot!(ratios[:, s], xs, t=:steppre, label=labels[s])
+    Plots.plot!(ratios[:, s], xs, t=:steppost, label=labels[s])
   end
   Plots.xlims!(logscale ? 0.0 : 1.0, 1.1 * max_ratio)
   Plots.ylims!(0, 1.1)
