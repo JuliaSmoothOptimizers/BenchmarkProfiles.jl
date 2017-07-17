@@ -13,7 +13,7 @@ function performance_ratios(T :: Array{Float64,2}; logscale :: Bool=true)
 
   (np, ns) = size(T);       # Number of problems and number of solvers.
 
-  T[isinf(T)] = NaN;
+  T[isinf.(T)] = NaN;
   T[T .< 0] = NaN;
   minperf = minimum(T, 2);  # Minimal (i.e., best) performance per solver
 
@@ -23,11 +23,11 @@ function performance_ratios(T :: Array{Float64,2}; logscale :: Bool=true)
     r[p, :] = T[p, :] / minperf[p];
   end
 
-  logscale && (r = log2(r));
+  logscale && (r = log2.(r));
   max_ratio = maximum(r);
 
   # Replace failures with twice the max_ratio and sort each column of r.
-  failures = isnan(r);
+  failures = isnan.(r);
   r[failures] = 2 * max_ratio;
   r = sort(r, 1);
   return (r, max_ratio)
