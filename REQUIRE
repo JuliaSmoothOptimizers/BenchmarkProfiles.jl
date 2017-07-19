@@ -1,2 +1,5 @@
 julia 0.5
 Plots
+
+julia 0.6
+Plots, NaNMath
