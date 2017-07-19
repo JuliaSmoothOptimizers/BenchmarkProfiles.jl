@@ -1,6 +1,6 @@
 module BenchmarkProfiles
 
-import Plots
+import Plots, NaNMath
 
 export performance_ratios, performance_profile
 export data_ratios, data_profile
