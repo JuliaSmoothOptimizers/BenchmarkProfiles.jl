@@ -59,15 +59,15 @@ function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractStr
   profile = Plots.plot(; kwargs...)  # initial empty plot
   for s = 1 : ns
     rs = view(ratios,:,s)
-      urs = unique(rs)
-      @show length(urs)
+    urs = unique(rs)
+    @show length(urs)
     xidx = zeros(Int,length(urs)+1)
     k = 0
-    rv = minimum(rs)
-    while rv < maximum(urs)
+    rv = log2(minimum(rs))
+    while rv < log2(maximum(urs))
       k += 1
-      xidx[k] = findlast(rs .<= rv)
-      rv = max(rs[xidx[k]]+sampletol,rs[xidx[k]+1])
+      xidx[k] = findlast(log2.(rs) .<= rv)
+      rv = max(log2(rs[xidx[k]])+sampletol, log2(rs[xidx[k]+1]))
     end
     xidx[k+1] = length(rs)
     xidx = xidx[xidx .> 0]
