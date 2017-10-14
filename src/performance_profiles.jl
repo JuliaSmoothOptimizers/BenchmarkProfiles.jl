@@ -50,6 +50,7 @@ performance plot.
 function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractString};
                              logscale :: Bool=true,
                              title :: AbstractString="",
+                             sampletol :: Float64 = 5e-2,
                              kwargs...)
 
   (ratios, max_ratio) = performance_ratios(T, logscale=logscale)
@@ -60,10 +61,25 @@ function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractStr
   length(labels) == 0 && (labels = [@sprintf("column %d", col) for col = 1 : ns])
   profile = Plots.plot()  # initial empty plot
   for s = 1 : ns
-    Plots.plot!(ratios[:, s], xs, t=:steppost, label=labels[s]; kwargs...)
+    rs = view(ratios,:,s)
+      urs = unique(rs)
+      @show length(urs)
+    xidx = zeros(Int,length(urs)+1)
+    k = 0
+    rv = minimum(rs)
+    while rv < maximum(urs)
+      k += 1
+      xidx[k] = findlast(rs .<= rv)
+      rv = max(rs[xidx[k]]+sampletol,rs[xidx[k]+1])
+    end
+    xidx[k+1] = length(rs)
+    xidx = xidx[xidx .> 0]
+    xidx = unique(xidx) # Needed?
+    @show length(xidx)
+    Plots.plot!(rs[xidx], xs[xidx], t=:steppost, label=labels[s]; kwargs...)
   end
-  Plots.xlims!(logscale ? 0.0 : 1.0, 1.1 * max_ratio)
-  Plots.ylims!(0, 1.1)
+ #Plots.xlims!(logscale ? 0.0 : 1.0, 1.1 * max_ratio)
+  #Plots.ylims!(0, 1.1)
   Plots.xlabel!("Within this factor of the best" * (logscale ? " (log scale)" : ""))
   Plots.ylabel!("Proportion of problems")
   Plots.title!(title)
