@@ -50,7 +50,7 @@ performance plot.
 function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractString};
                              logscale :: Bool=true,
                              title :: AbstractString="",
-                             sampletol :: Float64 = 5e-2,
+                             sampletol :: Float64 = 0.0,
                              kwargs...)
 
   (ratios, max_ratio) = performance_ratios(T, logscale=logscale)
@@ -62,36 +62,22 @@ function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractStr
   profile = Plots.plot()  # initial empty plot
   for s = 1 : ns
     rs = view(ratios,:,s)
-    urs = unique(rs)
-    @show length(urs)
-    xidx = zeros(Int,length(urs)+1)
+    xidx = zeros(Int,length(rs)+1)
     k = 0
-    rv = minimum(urs)
-    maxval = maximum(urs)
-    if logscale == false
-      # I will just use the logscale in Plots instead
-      rv = log2(rv)
-      maxval = log2(maxval)
-    end
-
+    rv = minimum(rs)
+    maxval = maximum(rs)
     while rv < maxval
       k += 1
-      if logscale == true
-        xidx[k] = findlast(rs .<= rv)
-        rv = max(rs[xidx[k]] + sampletol, rs[xidx[k]+1])
-      else
-        xidx[k] = findlast(log2.(rs) .<= rv)
-        rv = max(log2(rs[xidx[k]])+sampletol, log2(rs[xidx[k]+1]))
-      end
+      xidx[k] = findlast(rs .<= rv)
+      rv = max(rs[xidx[k]] + sampletol, rs[xidx[k]+1])
     end
     xidx[k+1] = length(rs)
     xidx = xidx[xidx .> 0]
     xidx = unique(xidx) # Needed?
-    @show length(xidx)
     Plots.plot!(rs[xidx], xs[xidx], t=:steppost, label=labels[s]; kwargs...)
   end
- #Plots.xlims!(logscale ? 0.0 : 1.0, 1.1 * max_ratio)
-  #Plots.ylims!(0, 1.1)
+  Plots.xlims!(logscale ? 0.0 : 1.0, 1.1 * max_ratio)
+  Plots.ylims!(0, 1.1)
   Plots.xlabel!("Within this factor of the best" * (logscale ? " (log scale)" : ""))
   Plots.ylabel!("Proportion of problems")
   Plots.title!(title)
