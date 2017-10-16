@@ -66,11 +66,23 @@ function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractStr
     @show length(urs)
     xidx = zeros(Int,length(urs)+1)
     k = 0
-    rv = log2(minimum(rs))
-    while rv < log2(maximum(urs))
+    rv = minimum(urs)
+    maxval = maximum(urs)
+    if logscale == false
+      # I will just use the logscale in Plots instead
+      rv = log2(rv)
+      maxval = log2(maxval)
+    end
+
+    while rv < maxval
       k += 1
-      xidx[k] = findlast(log2.(rs) .<= rv)
-      rv = max(log2(rs[xidx[k]])+sampletol, log2(rs[xidx[k]+1]))
+      if logscale == true
+        xidx[k] = findlast(rs .<= rv)
+        rv = max(rs[xidx[k]] + sampletol, rs[xidx[k]+1])
+      else
+        xidx[k] = findlast(log2.(rs) .<= rv)
+        rv = max(log2(rs[xidx[k]])+sampletol, log2(rs[xidx[k]+1]))
+      end
     end
     xidx[k+1] = length(rs)
     xidx = xidx[xidx .> 0]
