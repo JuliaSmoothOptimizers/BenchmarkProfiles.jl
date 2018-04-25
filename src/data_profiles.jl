@@ -75,9 +75,9 @@ function data_profile(H :: Array{Float64,3}, N :: Vector{Float64},
   (np, ns) = size(T)
   xs = [1:np;] / np
   length(labels) == 0 && (labels = [@sprintf("column %d", col) for col = 1 : ns])
-  profile = Plots.plot(; kwargs...)  # initial empty plot
+  profile = Plots.plot()  # initial empty plot
   for s = 1 : ns
-    Plots.plot!(T[:, s], xs, t=:steppost, label=labels[s])
+    Plots.plot!(T[:, s], xs, t=:steppost, label=labels[s]; kwargs...)
   end
   Plots.xlims!(0.0, 1.1 * max_data)
   Plots.ylims!(0, 1.1)
