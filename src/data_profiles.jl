@@ -12,7 +12,7 @@ See the documentation of `data_profile()` for more information.
 function data_ratios(H :: Array{Float64,3}, N :: Vector{Float64}; τ :: Float64=1.0e-3)
 
   (nf, np, ns) = size(H)
-  H[isinf(H)] = NaN;
+  H[isinf.(H)] = NaN;
   H[H .< 0] = NaN;
   for j = 1 : ns
     for i = 2 : nf
@@ -30,18 +30,18 @@ function data_ratios(H :: Array{Float64,3}, N :: Vector{Float64}; τ :: Float64=
     cutoff = prob_min[p] + τ * (prob_max[p] - prob_min[p])
     for s = 1 : ns
       nfevs = findfirst(H[:, p, s] .≤ cutoff)
-      T[p, s] = nfevs > 0 ? nfevs/N[p] : NaN
+      T[p, s] = nfevs == nothing ? NaN : nfevs/N[p]
     end
   end
 
   # Replace all NaNs with twice the max ratio and sort.
   max_data = maximum(T)
-  T[isnan(T)] = 2 * max_data
+  T[isnan.(T)] = 2 * max_data
   T = sort(T, 1)
   return (T, max_data)
 end
 
-data_ratios{TH <: Number, TN <: Number, Tt <: Number}(H :: Array{TH,3}, N :: Vector{TN}; τ :: Tt=convert(Tt, 1.0e-3)) = data_ratios(convert(Array{Float64,3}, H), convert(Vector{Float64}, N), τ=convert(Float64, τ))
+data_ratios(H :: Array{TH,3}, N :: Vector{TN}; τ :: Tt=convert(Tt, 1.0e-3)) where {TH <: Number, TN <: Number, Tt <: Number} = data_ratios(convert(Array{Float64,3}, H), convert(Vector{Float64}, N), τ=convert(Float64, τ))
 
 
 """Produce a data profile.
@@ -87,5 +87,4 @@ function data_profile(H :: Array{Float64,3}, N :: Vector{Float64},
   return profile
 end
 
-data_profile{TH <: Number, TN <: Number, S <: AbstractString}(H :: Array{TH,3}, N :: Vector{TN}, labels :: Vector{S}; kwargs...) =
-  data_profile(convert(Array{Float64,3}, H), convert(Vector{Float64}, N), convert(Vector{AbstractString}, labels); kwargs...)
+data_profile(H :: Array{TH,3}, N :: Vector{TN}, labels :: Vector{S}; kwargs...) where {TH <: Number, TN <: Number, S <: AbstractString} = data_profile(convert(Array{Float64,3}, H), convert(Vector{Float64}, N), convert(Vector{AbstractString}, labels); kwargs...)

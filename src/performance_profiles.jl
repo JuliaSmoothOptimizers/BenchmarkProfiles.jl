@@ -13,8 +13,8 @@ function performance_ratios(T :: Array{Float64,2}; logscale :: Bool=true)
 
   (np, ns) = size(T);       # Number of problems and number of solvers.
 
-  T[isinf.(T)] = NaN;
-  T[T .< 0] = NaN;
+  T[isinf.(T)] .= NaN;
+  T[T .< 0] .= NaN;
   minperf = mapslices(NaNMath.minimum, T, 2) # Minimal (i.e., best) performance per solver
 
   # Compute ratios and divide by smallest element in each row.
@@ -28,12 +28,12 @@ function performance_ratios(T :: Array{Float64,2}; logscale :: Bool=true)
 
   # Replace failures with twice the max_ratio and sort each column of r.
   failures = isnan.(r);
-  r[failures] = 2 * max_ratio;
-  r = sort(r, 1);
+  r[failures] .= 2 * max_ratio;
+  r .= sort(r, 1);
   return (r, max_ratio)
 end
 
-performance_ratios{Td <: Number}(T :: Array{Td,2}; logscale :: Bool=true) = performance_ratios(convert(Array{Float64,2}, T), logscale=logscale)
+performance_ratios(T :: Array{Td,2}; logscale :: Bool=true) where Td <: Number = performance_ratios(convert(Array{Float64,2}, T), logscale=logscale)
 
 
 """Produce a performance profile.
@@ -67,5 +67,5 @@ function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractStr
   return profile
 end
 
-performance_profile{Tn <: Number, S <: AbstractString}(T :: Array{Tn,2}, labels :: Vector{S}; kwargs...) =
+performance_profile(T :: Array{Tn,2}, labels :: Vector{S}; kwargs...) where {Tn <: Number, S <: AbstractString} =
   performance_profile(convert(Array{Float64,2}, T), convert(Vector{AbstractString}, labels); kwargs...)
