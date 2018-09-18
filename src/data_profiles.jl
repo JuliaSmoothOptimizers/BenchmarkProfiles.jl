@@ -16,7 +16,7 @@ function data_ratios(H :: Array{Float64,3}, N :: Vector{Float64}; τ :: Float64=
   H[H .< 0] = NaN;
   for j = 1 : ns
     for i = 2 : nf
-      H[i, :, j] = min(H[i, :, j], H[i-1, :, j])
+      H[i, :, j] = min.(H[i, :, j], H[i-1, :, j])
     end
   end
 
