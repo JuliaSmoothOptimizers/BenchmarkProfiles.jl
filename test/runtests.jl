@@ -1,6 +1,6 @@
 using BenchmarkProfiles
 using Plots
-using Base.Test
+using Test
 
 unicodeplots()
 T = 10 * rand(25, 3)

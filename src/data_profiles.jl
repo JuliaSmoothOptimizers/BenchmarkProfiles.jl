@@ -12,15 +12,15 @@ See the documentation of `data_profile()` for more information.
 function data_ratios(H :: Array{Float64,3}, N :: Vector{Float64}; τ :: Float64=1.0e-3)
 
   (nf, np, ns) = size(H)
-  H[isinf.(H)] = NaN;
-  H[H .< 0] = NaN;
+  H[isinf.(H)] .= NaN;
+  H[H .< 0] .= NaN;
   for j = 1 : ns
     for i = 2 : nf
-      H[i, :, j] = min.(H[i, :, j], H[i-1, :, j])
+      H[i, :, j] .= min.(H[i, :, j], H[i-1, :, j])
     end
   end
 
-  prob_min = minimum(minimum(H, 1), 3)  # min for each problem
+  prob_min = minimum(minimum(H, dims=1), dims=3)  # min for each problem
   prob_max = H[1, :, 1]      # starting value for each problem
 
   # For each problem and solver, determine the number of costly operations
@@ -36,8 +36,8 @@ function data_ratios(H :: Array{Float64,3}, N :: Vector{Float64}; τ :: Float64=
 
   # Replace all NaNs with twice the max ratio and sort.
   max_data = maximum(T)
-  T[isnan.(T)] = 2 * max_data
-  T = sort(T, 1)
+  T[isnan.(T)] .= 2 * max_data
+  T .= sort(T, dims=1)
   return (T, max_data)
 end
 

@@ -15,7 +15,7 @@ function performance_ratios(T :: Array{Float64,2}; logscale :: Bool=true)
 
   T[isinf.(T)] .= NaN;
   T[T .< 0] .= NaN;
-  minperf = mapslices(NaNMath.minimum, T, 2) # Minimal (i.e., best) performance per solver
+  minperf = mapslices(NaNMath.minimum, T, dims=2) # Minimal (i.e., best) performance per solver
 
   # Compute ratios and divide by smallest element in each row.
   r = zeros(np, ns);
@@ -29,7 +29,7 @@ function performance_ratios(T :: Array{Float64,2}; logscale :: Bool=true)
   # Replace failures with twice the max_ratio and sort each column of r.
   failures = isnan.(r);
   r[failures] .= 2 * max_ratio;
-  r .= sort(r, 1);
+  r .= sort(r, dims=1);
   return (r, max_ratio)
 end
 
