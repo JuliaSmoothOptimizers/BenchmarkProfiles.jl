@@ -18,10 +18,7 @@ matrix:
 branches:
   only:
     - master
+    - /^v\d+\.\d+(\.\d+)?(-\S*)?$/ # tags
 
 notifications:
   email: false
-
-script:
-  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - julia -e 'using Pkg; Pkg.clone(pwd()); Pkg.build("BenchmarkProfiles"); Pkg.test("BenchmarkProfiles"; coverage=true)'
