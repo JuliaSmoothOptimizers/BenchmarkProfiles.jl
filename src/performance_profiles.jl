@@ -12,7 +12,8 @@ See the documentation of `performance_profile()` for more information.
 function performance_ratios(T :: Array{Float64,2}; logscale :: Bool=true)
 
   if any(T .== 0)
-    error("Can't have cost 0")
+    @warn "some measures are zero; shifting all by one"
+    T .+= 1
   end
   (np, ns) = size(T);       # Number of problems and number of solvers.
 
