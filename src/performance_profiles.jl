@@ -79,8 +79,16 @@ function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractStr
   end
   Plots.xlims!(logscale ? 0.0 : 1.0, 1.1 * max_ratio)
   Plots.ylims!(0, 1.1)
-  Plots.xlabel!("Within this factor of the best" * (logscale ? " (log scale)" : ""))
-  Plots.ylabel!("Proportion of problems")
+  if :xlabel in keys(kwargs)
+    Plots.xlabel!(kwargs[:xlabel])
+  else
+    Plots.xlabel!("Within this factor of the best" * (logscale ? " (log scale)" : ""))
+  end
+  if :ylabel in keys(kwargs)
+    Plots.ylabel!(kwargs[:ylabel])
+  else
+    Plots.ylabel!("Proportion of problems")
+  end
   Plots.title!(title)
   return profile
 end
