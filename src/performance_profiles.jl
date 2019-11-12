@@ -53,14 +53,16 @@ function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractStr
                              title :: AbstractString="",
                              sampletol :: Float64 = 0.0,
                              kwargs...)
-
+  kwargs = Dict(kwargs)
   (ratios, max_ratio) = performance_ratios(T, logscale=logscale)
   (np, ns) = size(ratios)
 
   ratios = [ratios; 2.0 * max_ratio * ones(1, ns)]
   xs = [1:np+1;] / np
   length(labels) == 0 && (labels = [@sprintf("column %d", col) for col = 1 : ns])
-  profile = Plots.plot()  # initial empty plot
+  xlabel = haskey(kwargs, :xlabel) ? pop!(kwargs, :xlabel) : "Within this factor of the best" * (logscale ? " (log scale)" : "")
+  ylabel = haskey(kwargs, :ylabel) ? pop!(kwargs, :ylabel) : ylab = "Proportion of problems"
+  profile = Plots.plot(xlabel = xlabel, ylabel = ylabel, title = title, xlims = (logscale ? 0.0 : 1.0, 1.1 * max_ratio), ylims = (0, 1.1))  # initial plot
   for s = 1 : ns
     rs = view(ratios,:,s)
     xidx = zeros(Int,length(rs)+1)
@@ -77,19 +79,6 @@ function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractStr
     xidx = unique(xidx) # Needed?
     Plots.plot!(rs[xidx], xs[xidx], t=:steppost, label=labels[s]; kwargs...)
   end
-  Plots.xlims!(logscale ? 0.0 : 1.0, 1.1 * max_ratio)
-  Plots.ylims!(0, 1.1)
-  if :xlabel in keys(kwargs)
-    Plots.xlabel!(kwargs[:xlabel])
-  else
-    Plots.xlabel!("Within this factor of the best" * (logscale ? " (log scale)" : ""))
-  end
-  if :ylabel in keys(kwargs)
-    Plots.ylabel!(kwargs[:ylabel])
-  else
-    Plots.ylabel!("Proportion of problems")
-  end
-  Plots.title!(title)
   return profile
 end
 
