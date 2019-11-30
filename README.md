@@ -4,6 +4,9 @@ A simple [Julia](http://julialang.org) package to plot performance and data prof
 
 [![Build Status](https://travis-ci.org/JuliaSmoothOptimizers/BenchmarkProfiles.jl.svg?branch=master)](https://travis-ci.org/JuliaSmoothOptimizers/BenchmarkProfiles.jl)
 [![Build status](https://ci.appveyor.com/api/projects/status/pf5isj3gi53uj9vp/branch/master?svg=true)](https://ci.appveyor.com/project/dpo/benchmarkprofiles-jl/branch/master)
+[![Build Status](https://api.cirrus-ci.com/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl.svg)](https://cirrus-ci.com/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl)
+[![Coverage Status](https://coveralls.io/repos/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl/badge.svg?branch=master)](https://coveralls.io/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl?branch=master)
+[![codecov.io](https://codecov.io/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl/coverage.svg?branch=master)](https://codecov.io/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl?branch=master)
 
 This package contains Julia translations of original scripts by Elizabeth Dolan, Jorge Moré and Stefan Wild.
 See http://www.mcs.anl.gov/~wild/dfo/benchmarking.
