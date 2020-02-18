@@ -9,8 +9,7 @@ Performance profiles are straightforward to use. The input is a matrix `T` with 
 Basic usage:
 
 ```@example ex1
-using BenchmarkProfiles, Plots, Random
-pyplot()
+using BenchmarkProfiles, Random
 
 Random.seed!(0)
 
@@ -36,9 +35,11 @@ performance_profile(T, ["Solver 1", "Solver 2", "Solver 3"])
 In the example below, we pass `xlabel` to `performance_profile` and set `ylabel` through `ylabel!`.
 
 ```@example ex1
+using Plots
+
 T = 10 * rand(25, 3)
 performance_profile(T, ["Solver 1", "Solver 2", "Solver 3"],
-      lw=2, c=:black, linestyles=[:solid, :dash, :dot], xlabel="τ")
-ylabel!("ρ(τ)")
+      lw=2, c=:black, linestyles=[:solid, :dash, :dot], xlabel="\\tau")
+ylabel!("\\rho(\\tau)")
 ```
 
