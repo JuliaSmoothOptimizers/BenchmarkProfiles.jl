@@ -81,7 +81,11 @@ function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractStr
     if length(linestyles) > 0
       kwargs[:linestyle] = linestyles[s]
     end
-    Plots.plot!(rs[xidx], xs[xidx], t=:steppost, label=labels[s]; kwargs...)
+    if rs[1] > 0
+      Plots.plot!([0.0; rs[xidx]], [0.0; xs[xidx]], t=:steppost, label=labels[s]; kwargs...)
+    else
+      Plots.plot!(rs[xidx], xs[xidx], t=:steppost, label=labels[s]; kwargs...)
+    end
   end
   return profile
 end
