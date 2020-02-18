@@ -14,15 +14,15 @@ See http://www.mcs.anl.gov/~wild/dfo/benchmarking.
 The original code was not accompanied by an open-source license. Jorge Moré and Stefan Wild have kindly provided their consent in writing to allow distribution of this Julia translation.
 See the `consent` folder for a full transcription.
 
+Watch out for the [pitfalls](http://dl.acm.org/citation.cfm?id=2950048) of profiles!
+
 ## How to Install
 
 ```julia
 julia> Pkg.add("BenchmarkProfiles")
 ```
 
-Plotting is handled by [`Plots.jl`](https://github.com/tbreloff/Plots.jl) so the user can choose among several available plotting backends.
-
-Watch out for the [pitfalls](http://dl.acm.org/citation.cfm?id=2950048) of profiles!
+Plotting is handled by [`Plots.jl`](https://docs.juliaplots.org/latest/) so the user can choose among several available plotting backends.
 
 ## Example
 
