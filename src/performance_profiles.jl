@@ -63,7 +63,7 @@ function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractStr
   xlabel = pop!(kwargs, :xlabel, "Within this factor of the best" * (logscale ? " (log scale)" : ""))
   ylabel = pop!(kwargs, :ylabel, "Proportion of problems")
   linestyles = pop!(kwargs, :linestyles, Symbol[])
-  profile = Plots.plot(xlabel = xlabel, ylabel = ylabel, title = title, xlims = (logscale ? 0.0 : 1.0, 1.1 * max_ratio), ylims = (0, 1.1))  # initial plot
+  profile = Plots.plot(xlabel = xlabel, ylabel = ylabel, title = title, xlims = (logscale ? 0.0 : 1.0, 1.1 * max_ratio), ylims = (0, 1.1), xscale = :log10)  # initial plot
   for s = 1 : ns
     rs = view(ratios,:,s)
     xidx = zeros(Int,length(rs)+1)
