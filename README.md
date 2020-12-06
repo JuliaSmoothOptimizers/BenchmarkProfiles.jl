@@ -2,9 +2,9 @@
 
 A simple [Julia](http://julialang.org) package to plot performance and data profiles.
 
-| **Documentation** | **Travis, AppVeyor and Cirrus build statuses** | **Coverage** |
+| **Documentation** | **Linux/macOS/Windows/FreeBSD** | **Coverage** |
 |:-----------------:|:----------------------------------------------:|:------------:|
-| [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaSmoothOptimizers.github.io/BenchmarkProfiles.jl/dev) | [![Build Status](https://img.shields.io/travis/JuliaSmoothOptimizers/BenchmarkProfiles.jl?logo=travis)](https://travis-ci.org/JuliaSmoothOptimizers/BenchmarkProfiles.jl) [![Build status](https://img.shields.io/cirrus/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl?logo=appveyor)](https://ci.appveyor.com/project/dpo/krylov-jl) [![Build Status](https://img.shields.io/cirrus/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl?logo=Cirrus%20CI)](https://cirrus-ci.com/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl) | [![Coverage Status](https://coveralls.io/repos/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl/badge.svg?branch=master)](https://coveralls.io/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl?branch=master) [![codecov.io](https://codecov.io/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl/coverage.svg?branch=master)](https://codecov.io/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl?branch=master) |
+| [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaSmoothOptimizers.github.io/BenchmarkProfiles.jl/dev) | ![CI](https://github.com/JuliaSmoothOptimizers/NLPModels.jl/workflows/CI/badge.svg?branch=master) [![Build Status](https://img.shields.io/cirrus/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl?logo=Cirrus%20CI)](https://cirrus-ci.com/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl) | [![codecov](https://codecov.io/gh/JuliaSmoothOptimizers/BenchmarkProfiles.jl/branch/master/graph/badge.svg?token=39PVYBcETt)](https://codecov.io/gh/JuliaSmoothOptimizers/BenchmarkProfiles.jl) |
 
 This package contains Julia translations of original scripts by Elizabeth Dolan, Jorge Moré and Stefan Wild.
 See http://www.mcs.anl.gov/~wild/dfo/benchmarking.
