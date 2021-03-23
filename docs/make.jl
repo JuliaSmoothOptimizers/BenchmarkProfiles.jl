@@ -13,4 +13,7 @@ makedocs(
           ]
 )
 
-deploydocs(repo = "github.com/JuliaSmoothOptimizers/BenchmarkProfiles.jl.git")
+deploydocs(
+  repo = "github.com/JuliaSmoothOptimizers/BenchmarkProfiles.jl.git",
+  push_preview = true
+)
