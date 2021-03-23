@@ -39,6 +39,11 @@ end
 
 performance_ratios(T :: Array{Td,2}; logscale :: Bool=true) where Td <: Number = performance_ratios(convert(Array{Float64,2}, T), logscale=logscale)
 
+"""Produce the coordinates for a performance profile.
+
+There is normally no need to call this function directly. See the documentation
+of `performance_profile()` for more information.
+"""
 function performance_profile_data(T :: Array{Float64,2}; logscale :: Bool=true,
                                   sampletol :: Float64 = 0.0)
     (ratios, max_ratio) = performance_ratios(T, logscale=logscale)
@@ -100,6 +105,9 @@ function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractStr
   linestyles = pop!(kwargs, :linestyles, Symbol[])
   profile = Plots.plot(xlabel = xlabel, ylabel = ylabel, title = title, xlims = (logscale ? 0.0 : 1.0, 1.1 * max_ratio), ylims = (0, 1.1))  # initial plot
   for s = 1 : ns
+    if length(linestyles) > 0
+      kwargs[:linestyle] = linestyles[s]
+    end
     Plots.plot!(x_plot[s], y_plot[s], t=:steppost, label=labels[s]; kwargs...)
   end
   return profile
