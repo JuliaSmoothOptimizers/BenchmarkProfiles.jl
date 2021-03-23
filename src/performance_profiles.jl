@@ -39,6 +39,42 @@ end
 
 performance_ratios(T :: Array{Td,2}; logscale :: Bool=true) where Td <: Number = performance_ratios(convert(Array{Float64,2}, T), logscale=logscale)
 
+function performance_profile_data(T :: Array{Float64,2}; logscale :: Bool=true,
+                                  sampletol :: Float64 = 0.0)
+    (ratios, max_ratio) = performance_ratios(T, logscale=logscale)
+    (np, ns) = size(ratios)
+
+    ratios = [ratios; 2.0 * max_ratio * ones(1, ns)]
+    xs = [1:np+1;] / np
+
+    x_plot = Vector{Vector{Float64}}(undef, ns)
+    y_plot = Vector{Vector{Float64}}(undef, ns)
+
+    for s = 1 : ns
+      rs = view(ratios,:,s)
+      xidx = zeros(Int,length(rs)+1)
+      k = 0
+      rv = minimum(rs)
+      maxval = maximum(rs)
+      while rv < maxval
+        k += 1
+        xidx[k] = findlast(rs .<= rv)
+        rv = max(rs[xidx[k]] + sampletol, rs[xidx[k]+1])
+      end
+      xidx[k+1] = length(rs)
+      xidx = xidx[xidx .> 0]
+      xidx = unique(xidx) # Needed?
+
+      if rs[1] > 0
+        x_plot[s] = [0.0; rs[xidx]]
+        y_plot[s] = [0.0; xs[xidx]]
+      else
+        x_plot[s] = rs[xidx]
+        y_plot[s] = xs[xidx]
+      end
+    end
+    return (x_plot, y_plot, max_ratio)
+end
 
 """Produce a performance profile.
 
@@ -54,38 +90,17 @@ function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractStr
                              sampletol :: Float64 = 0.0,
                              kwargs...)
   kwargs = Dict{Symbol,Any}(kwargs)
-  (ratios, max_ratio) = performance_ratios(T, logscale=logscale)
-  (np, ns) = size(ratios)
 
-  ratios = [ratios; 2.0 * max_ratio * ones(1, ns)]
-  xs = [1:np+1;] / np
+  (x_plot, y_plot, max_ratio) = performance_profile_data(T, logscale=logscale, sampletol=sampletol)
+
+  ns = size(T, 2)
   length(labels) == 0 && (labels = [@sprintf("column %d", col) for col = 1 : ns])
   xlabel = pop!(kwargs, :xlabel, "Within this factor of the best" * (logscale ? " (log scale)" : ""))
   ylabel = pop!(kwargs, :ylabel, "Proportion of problems")
   linestyles = pop!(kwargs, :linestyles, Symbol[])
   profile = Plots.plot(xlabel = xlabel, ylabel = ylabel, title = title, xlims = (logscale ? 0.0 : 1.0, 1.1 * max_ratio), ylims = (0, 1.1))  # initial plot
   for s = 1 : ns
-    rs = view(ratios,:,s)
-    xidx = zeros(Int,length(rs)+1)
-    k = 0
-    rv = minimum(rs)
-    maxval = maximum(rs)
-    while rv < maxval
-      k += 1
-      xidx[k] = findlast(rs .<= rv)
-      rv = max(rs[xidx[k]] + sampletol, rs[xidx[k]+1])
-    end
-    xidx[k+1] = length(rs)
-    xidx = xidx[xidx .> 0]
-    xidx = unique(xidx) # Needed?
-    if length(linestyles) > 0
-      kwargs[:linestyle] = linestyles[s]
-    end
-    if rs[1] > 0
-      Plots.plot!([0.0; rs[xidx]], [0.0; xs[xidx]], t=:steppost, label=labels[s]; kwargs...)
-    else
-      Plots.plot!(rs[xidx], xs[xidx], t=:steppost, label=labels[s]; kwargs...)
-    end
+    Plots.plot!(x_plot[s], y_plot[s], t=:steppost, label=labels[s]; kwargs...)
   end
   return profile
 end
