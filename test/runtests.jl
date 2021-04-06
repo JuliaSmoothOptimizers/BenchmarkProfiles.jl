@@ -23,7 +23,7 @@ end
       push!(dfs,DataFrame(:perf_measure=>col))
   end
   cost(df) = df.perf_measure
-  stats = Dict(zip([:a, :b, :c],dfs))
+  stats = Dict([:a, :b, :c].=>dfs)
   profile = performance_profile(UnicodePlotsBackend(), stats, cost, title="Test Profile")
   @test isa(profile, UnicodePlots.Plot{BrailleCanvas})
   H = rand(25, 4, 3)
