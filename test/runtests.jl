@@ -1,5 +1,5 @@
 using BenchmarkProfiles
-using Test
+using DataFrames, Test
 
 @testset "No backend" begin
   T = 10 * rand(25, 3)
@@ -18,6 +18,14 @@ end
   labels = ["a", "b", "c"]
   profile = performance_profile(UnicodePlotsBackend(), T, labels)
   @test isa(profile, UnicodePlots.Plot{BrailleCanvas})
+  dfs  = DataFrame[]
+  for col in eachcol(T)
+      push!(dfs,DataFrame(:perf_measure=>col))
+  end
+  cost(df) = df.perf_measure
+  stats = Dict(zip([:a, :b, :c],dfs))
+  profile = performance_profile(UnicodePlotsBackend(), stats, cost, title="Test Profile")
+  @test isa(profile, UnicodePlots.Plot{BrailleCanvas})
   H = rand(25, 4, 3)
   T = ones(10)
   profile = data_profile(UnicodePlotsBackend(), H, T, labels)
@@ -30,6 +38,14 @@ if !Sys.isfreebsd() # GR_jll not available, so Plots won't install
     T = 10 * rand(25, 3)
     labels = ["a", "b", "c"]
     profile = performance_profile(PlotsBackend(), T, labels, linestyles=[:solid, :dash, :dot])
+    @test isa(profile, Plots.Plot)
+    dfs  = DataFrame[]
+    for col in eachcol(T)
+        push!(dfs,DataFrame(:perf_measure=>col))
+    end
+    cost(df) = df.perf_measure
+    stats = Dict(zip([:a, :b, :c],dfs))
+    profile = performance_profile(PlotsBackend(), stats, cost, title="Test Profile", linestyles=[:solid, :dash, :dot])
     @test isa(profile, Plots.Plot)
     H = rand(25, 4, 3)
     T = ones(10)
