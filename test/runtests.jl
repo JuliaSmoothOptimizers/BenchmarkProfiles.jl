@@ -21,6 +21,7 @@ using Test
   @test_throws ArgumentError data_profile(UnicodePlotsBackend(), H, T, labels)
 end
 
+
 @testset "UnicodePlots" begin
   using UnicodePlots
   T = 10 * rand(25, 3)
