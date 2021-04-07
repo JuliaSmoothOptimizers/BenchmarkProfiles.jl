@@ -57,7 +57,7 @@ of `performance_profile()` for more information.
 """
 function performance_profile_data(T :: Array{Float64,2}; logscale :: Bool=true,
                                   sampletol :: Float64 = 0.0, drawtol :: Float64 = 0.0)
-    (ratios, max_ratio) = performance_ratios(T, logscale=logscale,drawtol=drawtol)
+    (ratios, max_ratio) = performance_ratios(T, logscale=logscale, drawtol=drawtol)
     (np, ns) = size(ratios)
 
     ratios = [ratios; 2.0 * max_ratio * ones(1, ns)]
