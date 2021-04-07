@@ -144,7 +144,7 @@ Inputs:
   - If the solver did not solve the problem, return Inf or a negative number.
 Examples of cost functions:
 - `cost(df) = df.elapsed_time`: Simple `elapsed_time` cost. Assumes the solver solved the problem.
-- `cost(df) = (df.status .!= :first_order) * Inf + df.elapsed_time`: Takes into consideration the status of the solver.
+- `cost(df) = (df.status .!= :first_order) * Inf + df.elapsed_time`: Takes the status of the solver into consideration.
 """
 function performance_profile(b::AbstractBackend, stats::Dict{Symbol,DataFrame}, cost::Function, args...; kwargs...)
   solvers = keys(stats)
