@@ -141,7 +141,7 @@ Inputs:
 - `stats::Dict{Symbol,DataFrame}`: pairs of `:solver => df`;
 - `cost::Function`: cost function applyed to each `df`. Should return a vector with the cost of solving the problem at each row;
   - if the cost is zero for at least one problem, all costs will be shifted by 1;
-  - If the solver did not solve the problem, return Inf or a negative number.
+  - if the solver did not solve the problem, return Inf or a negative number.
 Examples of cost functions:
 - `cost(df) = df.elapsed_time`: Simple `elapsed_time` cost. Assumes the solver solved the problem.
 - `cost(df) = (df.status .!= :first_order) * Inf + df.elapsed_time`: Takes the status of the solver into consideration.
