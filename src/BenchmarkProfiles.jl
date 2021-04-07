@@ -1,9 +1,9 @@
 module BenchmarkProfiles
 
+using DataFrames
 import NaNMath
 using Requires
 using Printf
-using DataFrames
 
 export performance_ratios, performance_profile, performance_profile_data
 export data_ratios, data_profile
