@@ -29,13 +29,7 @@ function performance_ratios(T :: Array{Float64,2}; logscale :: Bool=true, drawto
   # Use a draw tolerance of `drawtol` (in percentage).
   if (drawtol > 0 && drawtol < 1)
     drawtol += 1. 
-    for p in 1 : np
-      for s in 1 : ns
-        if r[p,s] <= drawtol
-          r[p,s] = 1.
-        end
-      end
-    end
+    r[r .<= drawtol] .= 1
   end
 
   logscale && (r = log2.(r));
