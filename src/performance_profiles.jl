@@ -140,7 +140,7 @@ Inputs:
 - `b::AbstractBackend`: the backend used to produce the plot.
 - `stats::Dict{Symbol,DataFrame}`: pairs of `:solver => df`;
 - `cost::Function`: cost function applyed to each `df`. Should return a vector with the cost of solving the problem at each row;
-  - 0 cost is not allowed;
+  - if the cost is zero for at least one problem, all costs will be shifted by 1;
   - If the solver did not solve the problem, return Inf or a negative number.
 Examples of cost functions:
 - `cost(df) = df.elapsed_time`: Simple `elapsed_time` cost. Assumes the solver solved the problem.
