@@ -1,5 +1,6 @@
 using BenchmarkProfiles
-using DataFrames, Test
+using DataFrames
+using Test
 
 @testset "No backend" begin
   T = 10 * rand(25, 3)
