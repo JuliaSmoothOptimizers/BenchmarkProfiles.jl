@@ -9,7 +9,7 @@
 There is normally no need to call this function directly.
 See the documentation of `performance_profile()` for more information.
 """
-function performance_ratios(T :: Array{Float64,2}; logscale :: Bool=true)
+function performance_ratios(T :: Array{Float64,2}; logscale :: Bool=true, drawtol :: Float64 = 0.0)
 
   if any(T .== 0)
     @warn "some measures are zero; shifting all by one"
@@ -26,6 +26,11 @@ function performance_ratios(T :: Array{Float64,2}; logscale :: Bool=true)
   for p = 1 : np
     r[p, :] = T[p, :] / minperf[p];
   end
+  # Use a draw tolerance of `drawtol` (in percentage).
+  if (drawtol > 0 && drawtol < 1)
+    drawtol += 1. 
+    r[r .<= drawtol] .= 1
+  end
 
   logscale && (r = log2.(r));
   max_ratio = NaNMath.maximum(r)
@@ -37,7 +42,7 @@ function performance_ratios(T :: Array{Float64,2}; logscale :: Bool=true)
   return (r, max_ratio)
 end
 
-performance_ratios(T :: Array{Td,2}; logscale :: Bool=true) where Td <: Number = performance_ratios(convert(Array{Float64,2}, T), logscale=logscale)
+performance_ratios(T :: Array{Td,2}; logscale :: Bool=true, drawtol :: Float64= 0.0) where Td <: Number = performance_ratios(convert(Array{Float64,2}, T), logscale=logscale, drawtol = drawtol)
 
 """Produce the coordinates for a performance profile.
 
@@ -45,8 +50,8 @@ There is normally no need to call this function directly. See the documentation
 of `performance_profile()` for more information.
 """
 function performance_profile_data(T :: Array{Float64,2}; logscale :: Bool=true,
-                                  sampletol :: Float64 = 0.0)
-    (ratios, max_ratio) = performance_ratios(T, logscale=logscale)
+                                  sampletol :: Float64 = 0.0, drawtol :: Float64 = 0.0)
+    (ratios, max_ratio) = performance_ratios(T, logscale=logscale, drawtol=drawtol)
     (np, ns) = size(ratios)
 
     ratios = [ratios; 2.0 * max_ratio * ones(1, ns)]
@@ -93,10 +98,11 @@ function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractStr
                              logscale :: Bool=true,
                              title :: AbstractString="",
                              sampletol :: Float64 = 0.0,
+                             drawtol :: Float64 = 0.0,
                              kwargs...)
   kwargs = Dict{Symbol,Any}(kwargs)
 
-  (x_plot, y_plot, max_ratio) = performance_profile_data(T, logscale=logscale, sampletol=sampletol)
+  (x_plot, y_plot, max_ratio) = performance_profile_data(T, logscale=logscale, sampletol=sampletol, drawtol=drawtol)
 
   ns = size(T, 2)
   length(labels) == 0 && (labels = [@sprintf("column %d", col) for col = 1 : ns])
