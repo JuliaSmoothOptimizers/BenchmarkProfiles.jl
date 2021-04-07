@@ -27,7 +27,7 @@ function performance_ratios(T :: Array{Float64,2}; logscale :: Bool=true, drawto
     r[p, :] = T[p, :] / minperf[p];
   end
   # Use a draw tolerance of `drawtol` (in percentage).
-  if (drawtol > 0. && drawtol < 1.)
+  if (drawtol > 0 && drawtol < 1)
     drawtol += 1. 
     for p in 1 : np
       for s in 1 : ns
