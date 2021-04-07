@@ -60,7 +60,7 @@ if !Sys.isfreebsd() # GR_jll not available, so Plots won't install
     @test isa(profile, Plots.Plot)
     H = rand(25, 4, 3)
     T = ones(10)
-    profile = data_profile(PlotsBackend(), H, T, labels,, linestyles=[:solid, :dash, :dot])
+    profile = data_profile(PlotsBackend(), H, T, labels, linestyles=[:solid, :dash, :dot])
     @test isa(profile, Plots.Plot)
   end
 end
