@@ -86,38 +86,35 @@ function performance_profile_data(T :: Array{Float64,2}; logscale :: Bool=true,
     return (x_plot, y_plot, max_ratio)
 end
 
-"""Produce a performance profile.
-
-Each column of the matrix `T` defines the performance data for a solver
-(smaller is better). Failures on a given problem are represented by a
-negative value, an infinite value, or `NaN`.
-The optional argument `logscale` is used to produce a logarithmic (base 2)
-performance plot.
-"""
-function performance_profile(T :: Array{Float64,2}, labels :: Vector{AbstractString};
-                             logscale :: Bool=true,
-                             title :: AbstractString="",
-                             sampletol :: Float64 = 0.0,
-                             drawtol :: Float64 = 0.0,
-                             kwargs...)
-  kwargs = Dict{Symbol,Any}(kwargs)
-
-  (x_plot, y_plot, max_ratio) = performance_profile_data(T, logscale=logscale, sampletol=sampletol, drawtol=drawtol)
-
-  ns = size(T, 2)
+function performance_profile_axis_labels(labels, ns, logscale; kwargs...)
   length(labels) == 0 && (labels = [@sprintf("column %d", col) for col = 1 : ns])
+  kwargs = Dict{Symbol, Any}(kwargs)
   xlabel = pop!(kwargs, :xlabel, "Within this factor of the best" * (logscale ? " (log scale)" : ""))
   ylabel = pop!(kwargs, :ylabel, "Proportion of problems")
-  linestyles = pop!(kwargs, :linestyles, Symbol[])
-  profile = Plots.plot(xlabel = xlabel, ylabel = ylabel, title = title, xlims = (logscale ? 0.0 : 1.0, 1.1 * max_ratio), ylims = (0, 1.1))  # initial plot
-  for s = 1 : ns
-    if length(linestyles) > 0
-      kwargs[:linestyle] = linestyles[s]
-    end
-    Plots.plot!(x_plot[s], y_plot[s], t=:steppost, label=labels[s]; kwargs...)
-  end
-  return profile
+  return (xlabel, ylabel, labels)
 end
 
-performance_profile(T :: Array{Tn,2}, labels :: Vector{S}; kwargs...) where {Tn <: Number, S <: AbstractString} =
-  performance_profile(convert(Array{Float64,2}, T), convert(Vector{AbstractString}, labels); kwargs...)
+"""
+    performance_profile(b, T, labels; logscale=true, title="", sampletol=0.0, drawtol=0.0; kwargs...)
+
+Produce a performance profile using the specified backend.
+
+## Arguments
+
+* `b :: AbstractBackend`: the backend used to produce the plot.
+* `T :: Matrix{Float64}`: each column of `T` defines the performance data for a solver (smaller is better).
+  Failures on a given problem are represented by a negative value, an infinite value, or `NaN`.
+* `labels :: Vector{AbstractString}`: a vector of labels for each profile used to produce a legend.
+  If empty, `labels` will be set to `["column 1", "column 2", ...]`.
+
+## Keyword Arguments
+
+* `logscale :: Bool=true`: produce a logarithmic (base 2) performance plot.
+* `title :: AbstractString=""`: set a title for the plot.
+* `sampletol :: Float64 = 0.0`: a tolerance used to downsample profiles for performance when using a large number of problems.
+* `drawtol :: Float64 = 0.0`: a tolerance to declare a draw between two performance measures.
+* `linestyles::Vector{Symbol}`: a vector of line styles to use for the profiles, if supported by the backend.
+
+Other keyword arguments are passed to the plot command for the corresponding backend.
+"""
+performance_profile

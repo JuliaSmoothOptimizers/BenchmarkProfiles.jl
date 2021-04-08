@@ -35,56 +35,46 @@ function data_ratios(H :: Array{Float64,3}, N :: Vector{Float64}; τ :: Float64=
   end
 
   # Replace all NaNs with twice the max ratio and sort.
-  max_data = maximum(T)
+  max_data = maximum(T[.!(isnan.(T))])
   T[isnan.(T)] .= 2 * max_data
   T .= sort(T, dims=1)
   return (T, max_data)
 end
 
-data_ratios(H :: Array{TH,3}, N :: Vector{TN}; τ :: Tt=convert(Tt, 1.0e-3)) where {TH <: Number, TN <: Number, Tt <: Number} = data_ratios(convert(Array{Float64,3}, H), convert(Vector{Float64}, N), τ=convert(Float64, τ))
-
-
-"""Produce a data profile.
-
-The 3-dimensional array `H` gives the performance data for each solver
-and each problem (smaller is better). `H[k,p,s]` is the `k`-th costly
-operation (e.g., function evaluation) for problem `p` and solver `s`.
-Failures on a given problem are represented by a negative value, an
-infinite value, or `NaN`.
-
-The vector `N` gives a scaling associated to each problem. If the number
-of simplex gradients is being measured, `N[p]` should be `n(p) + 1`
-where `n(p)` is the number of variables of problem `p`.
-
-The threshold `τ` determines the tolerance in the convergence criterion
-
-  f(x) ≤ fL + τ (f0 - fL),
-
-where for each problem f(x) is a measure recorded (e.g., the objective
-value), f0 is the measure at the initial point, and fL is the best measure
-obtained by any solver.
-"""
-function data_profile(H :: Array{Float64,3}, N :: Vector{Float64},
-                      labels :: Vector{AbstractString}=AbstractString[];
-                      τ :: Float64=1.0e-3,
-                      operations :: AbstractString="function evaluations",
-                      title :: AbstractString="",
-                      kwargs...)
-
-  (T, max_data) = data_ratios(H, N, τ=τ)
-  (np, ns) = size(T)
-  xs = [1:np;] / np
+function data_profile_axis_labels(labels, ns, operations, τ; kwargs...)
   length(labels) == 0 && (labels = [@sprintf("column %d", col) for col = 1 : ns])
-  profile = Plots.plot()  # initial empty plot
-  for s = 1 : ns
-    Plots.plot!(T[:, s], xs, t=:steppost, label=labels[s]; kwargs...)
-  end
-  Plots.xlims!(0.0, 1.1 * max_data)
-  Plots.ylims!(0, 1.1)
-  Plots.xlabel!("Number of " * strip(operations) * @sprintf(" (thresh %7.1e)", τ))
-  Plots.ylabel!("Proportion of problems")
-  Plots.title!(title)
-  return profile
+  kwargs = Dict{Symbol, Any}(kwargs)
+  xlabel = pop!(kwargs, :xlabel, "Number of " * strip(operations) * @sprintf(" (thresh %7.1e)", τ))
+  ylabel = pop!(kwargs, :ylabel, "Proportion of problems")
+  return (xlabel, ylabel, labels)
 end
 
-data_profile(H :: Array{TH,3}, N :: Vector{TN}, labels :: Vector{S}; kwargs...) where {TH <: Number, TN <: Number, S <: AbstractString} = data_profile(convert(Array{Float64,3}, H), convert(Vector{Float64}, N), convert(Vector{AbstractString}, labels); kwargs...)
+"""
+    data_profile(b, H, N, labels; τ=1.0e-3, operations="function evaluations", title=""; kwargs...)
+
+Produce a data profile using the specified backend.
+
+## Arguments
+
+* `b :: AbstractBackend`: the backend used to produce the plot.
+* `H :: Array{Float64,3}`: the performance data for each solver and each problem (smaller is better).
+  `H[k,p,s]` is the `k`-th costly operation (e.g., function evaluation) for problem `p` and solver `s`.
+  Failures on a given problem are represented by a negative value, an infinite value, or `NaN`.
+* `N :: Vector{Float64}`: scaling associated to each problem.
+  If the number of simplex gradients is being measured, `N[p]` should be `n(p) + 1` where `n(p)` is the number of variables of problem `p`.
+* `labels :: Vector{AbstractString}`: a vector of labels for each profile used to produce a legend.
+  If empty, `labels` will be set to `["column 1", "column 2", ...]`.
+
+## Keyword Arguments
+
+* `τ :: Float64=1.0e-3`: threshold that determines the tolerance in the convergence criterion
+
+    f(x) ≤ fL + τ (f0 - fL),
+
+  where for each problem f(x) is a measure recorded (e.g., the objective value), f0 is the measure at the initial point, and fL is the best measure obtained by any solver.
+* `operations :: AbstractString="function evaluations"`: used for labeling the horizontal axis.
+* `title :: AbstractString=""`: set a title for the plot.
+
+Other keyword arguments are passed to the plot command for the corresponding backend.
+"""
+data_profile
