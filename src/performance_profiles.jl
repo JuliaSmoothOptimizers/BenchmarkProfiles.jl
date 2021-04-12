@@ -87,7 +87,7 @@ function performance_profile_data(T :: Array{Float64,2}; logscale :: Bool=true,
 end
 
 function performance_profile_axis_labels(labels, ns, logscale; kwargs...)
-  length(labels) == 0 && (labels = [@sprintf("column %d", col) for col = 1 : ns])
+  length(labels) == 0 && (labels = ["column $col" for col = 1 : ns])
   kwargs = Dict{Symbol, Any}(kwargs)
   xlabel = pop!(kwargs, :xlabel, "Within this factor of the best" * (logscale ? " (log scale)" : ""))
   ylabel = pop!(kwargs, :ylabel, "Proportion of problems")
