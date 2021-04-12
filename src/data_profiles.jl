@@ -42,7 +42,7 @@ function data_ratios(H :: Array{Float64,3}, N :: Vector{Float64}; τ :: Float64=
 end
 
 function data_profile_axis_labels(labels, ns, operations, τ; kwargs...)
-  length(labels) == 0 && (labels = [@sprintf("column %d", col) for col = 1 : ns])
+  length(labels) == 0 && (labels = ["column $col" for col = 1 : ns])
   kwargs = Dict{Symbol, Any}(kwargs)
   xlabel = pop!(kwargs, :xlabel, "Number of " * strip(operations) * @sprintf(" (thresh %7.1e)", τ))
   ylabel = pop!(kwargs, :ylabel, "Proportion of problems")
