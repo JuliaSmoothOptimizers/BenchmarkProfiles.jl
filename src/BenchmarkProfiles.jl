@@ -21,8 +21,8 @@ end
 for backend ∈ bp_backends
   @eval begin
     B = eval($backend)
-    performance_profile(b::B, ::Matrix{Float64}, ::Vector{S}; kwargs...) where S <: AbstractString = throw_error(b)
-    data_profile(b::B, ::Array{Float64,3}, ::Vector{Float64}, ::Vector{S}; kwargs...) where S <: AbstractString = throw_error(b)
+    performance_profile_plot(b::B, args...; kwargs...) = throw_error(b)
+    data_profile_plot(b::B, args...; kwargs...) = throw_error(b)
   end
 end
 

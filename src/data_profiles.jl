@@ -77,4 +77,17 @@ Produce a data profile using the specified backend.
 
 Other keyword arguments are passed to the plot command for the corresponding backend.
 """
-data_profile
+function data_profile(b::AbstractBackend,
+                      H :: Array{Float64,3},
+                      N :: Vector{Float64},
+                      labels :: Vector{S}=String[];
+                      τ :: Float64=1.0e-3,
+                      operations :: AbstractString="function evaluations",
+                      title :: AbstractString="",
+                      kwargs...) where S <: AbstractString
+  (T, max_data) = data_ratios(H, N, τ=τ)
+  (np, ns) = size(T)
+  (xlabel, ylabel, labels) = data_profile_axis_labels(labels, ns, operations, τ; kwargs...)
+  xs = [1:np;] / np
+  data_profile_plot(b, T, xs, max_data, xlabel, ylabel, labels, title; kwargs...)
+end

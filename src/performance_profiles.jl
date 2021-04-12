@@ -28,7 +28,7 @@ function performance_ratios(T :: Array{Float64,2}; logscale :: Bool=true, drawto
   end
   # Use a draw tolerance of `drawtol` (in percentage).
   if (drawtol > 0 && drawtol < 1)
-    drawtol += 1. 
+    drawtol += 1.
     r[r .<= drawtol] .= 1
   end
 
@@ -117,4 +117,15 @@ Produce a performance profile using the specified backend.
 
 Other keyword arguments are passed to the plot command for the corresponding backend.
 """
-performance_profile
+function performance_profile(b::AbstractBackend,
+                             T :: Matrix{Float64},
+                             labels :: Vector{S}=String[];
+                             logscale :: Bool = true,
+                             title :: AbstractString = "",
+                             sampletol :: Float64 = 0.0,
+                             drawtol :: Float64 = 0.0,
+                             kwargs...) where S <: AbstractString
+  xlabel, ylabel, labels = performance_profile_axis_labels(labels, size(T, 2), logscale; kwargs...)
+  (x_plot, y_plot, max_ratio) = performance_profile_data(T, logscale=logscale, sampletol=sampletol, drawtol=drawtol)
+  performance_profile_plot(b, x_plot, y_plot, max_ratio, xlabel, ylabel, labels, title, logscale; kwargs...)
+end
