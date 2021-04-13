@@ -1,5 +1,6 @@
 module BenchmarkProfiles
 
+using DataFrames
 import NaNMath
 using Requires
 using Printf
