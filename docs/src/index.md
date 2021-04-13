@@ -15,17 +15,64 @@ Watch out for the [pitfalls](http://dl.acm.org/citation.cfm?id=2950048) of profi
 pkg> add BenchmarkProfiles
 ```
 
-Plotting in handled by [`Plots.jl`](http://docs.juliaplots.org/latest/) so the user can choose among several available plotting backends.
-
+No plotting backend is loaded by default so the user can choose among several available plotting backends.
+Currently, [Plots.jl](https://github.com/JuliaPlots/Plots.jl) and [UnicodePlots.jl](https://github.com/Evizero/UnicodePlots.jl) are supported.
+Backends become available when the corresponding package is imported.
 ## Example
 
 ```julia
 julia> using BenchmarkProfiles
-julia> T = 10 * rand(25, 3) # 25 problems, 3 solvers
-julia> performance_profile(T, ["Solver 1", "Solver 2", "Solver 3"], title="Celebrity Deathmatch")
+julia> T = 10 * rand(25,3);  # 25 problems, 3 solvers
+julia> performance_profile(PlotsBackend(), T, ["Solver 1", "Solver 2", "Solver 3"], title="Celebrity Deathmatch")
+ERROR: ArgumentError: The backend PlotsBackend() is not loaded. Please load the corresponding AD package.
+julia> using Plots
+julia> performance_profile(PlotsBackend(), T, ["Solver 1", "Solver 2", "Solver 3"], title="Celebrity Deathmatch")  # Success!
 ```
 
 ![Performance Profile](assets/random_profile.png)
+
+## Adding a New Backend
+
+In order to add a new backend,
+
+1. edit `src/BenchmarkProfiles.jl` to define the backend and make it available:
+    ```julia
+    struct SomeNewPlotBackend <: AbstractBackend end
+    const bp_backends = [:PlotsBackend, :UnicodePlotsBackend, :SomeNewPlotBackend]
+    ```
+2. edit `src/requires.jl` to define how to produce the plot from the data:
+    ```julia
+    @require SomeNewPlot = "91a5bcdd-55d7-5caf-9e0b-520d859cae80" begin
+      function performance_profile_plot(::SomeNewPlotBackend,
+                                        x_plot,
+                                        y_plot,
+                                        max_ratio,
+                                        xlabel,
+                                        ylabel,
+                                        labels,
+                                        title,
+                                        logscale;
+                                        kwargs...)
+        #
+        # now produce the plot and return the plot object
+        #
+      end
+
+      function data_profile_plot(::SomeNewPlotBackend,
+                                 T,
+                                 xs,
+                                 max_data,
+                                 xlabel,
+                                 ylabel,
+                                 labels,
+                                 title;
+                                 kwargs...)
+        #
+        # do the same here
+        #
+      end
+    end
+    ```
 
 ## References
 

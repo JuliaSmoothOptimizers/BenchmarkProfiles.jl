@@ -1,12 +1,39 @@
 using BenchmarkProfiles
-using Plots
 using Test
 
-unicodeplots()
-T = 10 * rand(25, 3)
-performance_profile(T, ["a", "b", "c"], title="Test Profile", linestyles=[:solid, :dash, :dot])
+@testset "No backend" begin
+  T = 10 * rand(25, 3)
+  labels = ["a", "b", "c"]
+  @test_throws ArgumentError performance_profile(PlotsBackend(), T, labels)
+  @test_throws ArgumentError performance_profile(UnicodePlotsBackend(), T, labels)
+  H = rand(25, 4, 3)
+  T = ones(10)
+  @test_throws ArgumentError data_profile(PlotsBackend(), H, T, labels)
+  @test_throws ArgumentError data_profile(PlotsBackend(), H, T, labels)
+end
 
-performance_profile(T, ["a", "b", "c"], drawtol = 0.05, title="Test Profile with drawtol", linestyles=[:solid, :dash, :dot])
-H = rand(25, 4, 3)
-data_profile(H, ones(10), ["a", "b", "c"], title="Test Profile")
+@testset "UnicodePlots" begin
+  using UnicodePlots
+  T = 10 * rand(25, 3)
+  labels = ["a", "b", "c"]
+  profile = performance_profile(UnicodePlotsBackend(), T, labels)
+  @test isa(profile, UnicodePlots.Plot{BrailleCanvas})
+  H = rand(25, 4, 3)
+  T = ones(10)
+  profile = data_profile(UnicodePlotsBackend(), H, T, labels)
+  @test isa(profile, UnicodePlots.Plot{BrailleCanvas})
+end
 
+if !Sys.isfreebsd() # GR_jll not available, so Plots won't install
+  @testset "Plots" begin
+    using Plots
+    T = 10 * rand(25, 3)
+    labels = ["a", "b", "c"]
+    profile = performance_profile(PlotsBackend(), T, labels, linestyles=[:solid, :dash, :dot])
+    @test isa(profile, Plots.Plot)
+    H = rand(25, 4, 3)
+    T = ones(10)
+    profile = data_profile(PlotsBackend(), H, T, labels)
+    @test isa(profile, Plots.Plot)
+  end
+end

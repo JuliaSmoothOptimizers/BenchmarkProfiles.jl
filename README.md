@@ -20,14 +20,18 @@ Watch out for the [pitfalls](http://dl.acm.org/citation.cfm?id=2950048) of profi
 julia> Pkg.add("BenchmarkProfiles")
 ```
 
-Plotting is handled by [`Plots.jl`](https://docs.juliaplots.org/latest/) so the user can choose among several available plotting backends.
-
+No plotting backend is loaded by default so the user can choose among several available plotting backends.
+Currently, [Plots.jl](https://github.com/JuliaPlots/Plots.jl) and [UnicodePlots.jl](https://github.com/Evizero/UnicodePlots.jl) are supported.
+Backends become available when the corresponding package is imported.
 ## Example
 
 ```julia
 julia> using BenchmarkProfiles
 julia> T = 10 * rand(25,3);  # 25 problems, 3 solvers
-julia> performance_profile(T, ["Solver 1", "Solver 2", "Solver 3"], title="Celebrity Deathmatch")
+julia> performance_profile(PlotsBackend(), T, ["Solver 1", "Solver 2", "Solver 3"], title="Celebrity Deathmatch")
+ERROR: ArgumentError: The backend PlotsBackend() is not loaded. Please load the corresponding AD package.
+julia> using Plots
+julia> performance_profile(PlotsBackend(), T, ["Solver 1", "Solver 2", "Solver 3"], title="Celebrity Deathmatch")  # Success!
 ```
 
 ![Performance Profile](./img/random_profile.png)
