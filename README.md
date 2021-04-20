@@ -41,3 +41,7 @@ julia> performance_profile(PlotsBackend(), T, ["Solver 1", "Solver 2", "Solver 3
 E. Dolan and J. Moré, *Benchmarking Optimization Software with Performance Profiles*, Mathematical Programming 91, pages 201--213, 2002. DOI [10.1007/s101070100263](http://dx.doi.org/10.1007/s101070100263).
 
 J. J. Moré and S. M. Wild, *Benchmarking Derivative-Free Optimization Algorithms*, SIAM Journal on Optimization, 20(1), pages 172--191, 2009. DOI [10.1137/080724083](http://dx.doi.org/10.1137/080724083).
+
+## How to Cite
+
+If you use BenchmarkProfiles.jl in your work, please cite using the format given in [CITATION.bib](https://github.com/JuliaSmoothOptimizers/BenchmarkProfiles.jl/blob/master/CITATION.bib).
