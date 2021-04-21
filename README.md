@@ -2,9 +2,9 @@
 
 A simple [Julia](http://julialang.org) package to plot performance and data profiles.
 
-| **Documentation** | **Linux/macOS/Windows/FreeBSD** | **Coverage** |
-|:-----------------:|:----------------------------------------------:|:------------:|
-| [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaSmoothOptimizers.github.io/BenchmarkProfiles.jl/dev) | ![CI](https://github.com/JuliaSmoothOptimizers/NLPModels.jl/workflows/CI/badge.svg?branch=master) [![Build Status](https://img.shields.io/cirrus/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl?logo=Cirrus%20CI)](https://cirrus-ci.com/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl) | [![codecov](https://codecov.io/gh/JuliaSmoothOptimizers/BenchmarkProfiles.jl/branch/master/graph/badge.svg?token=39PVYBcETt)](https://codecov.io/gh/JuliaSmoothOptimizers/BenchmarkProfiles.jl) |
+| **Citation** | **Documentation** | **Linux/macOS/Windows/FreeBSD** | **Coverage** |
+|:-----------------:|:-----------------:|:----------------------------------------------:|:------------:|
+| [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4630955.svg)](https://doi.org/10.5281/zenodo.4630955) | [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://JuliaSmoothOptimizers.github.io/BenchmarkProfiles.jl/dev) | ![CI](https://github.com/JuliaSmoothOptimizers/NLPModels.jl/workflows/CI/badge.svg?branch=master) [![Build Status](https://img.shields.io/cirrus/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl?logo=Cirrus%20CI)](https://cirrus-ci.com/github/JuliaSmoothOptimizers/BenchmarkProfiles.jl) | [![codecov](https://codecov.io/gh/JuliaSmoothOptimizers/BenchmarkProfiles.jl/branch/master/graph/badge.svg?token=39PVYBcETt)](https://codecov.io/gh/JuliaSmoothOptimizers/BenchmarkProfiles.jl) |
 
 This package contains Julia translations of original scripts by Elizabeth Dolan, Jorge Moré and Stefan Wild.
 See http://www.mcs.anl.gov/~wild/dfo/benchmarking.
