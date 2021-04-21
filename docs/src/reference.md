@@ -1,12 +1,17 @@
 # Reference
-
-```@index
+​
+## Contents
+​
+```@contents
+Pages = ["reference.md"]
 ```
-
-```@docs
-data_ratios
-data_profile
-performance_profile
-performance_ratios
-performance_profile_data
+​
+## Index
+​
+```@index
+Pages = ["reference.md"]
+```
+​
+```@autodocs
+Modules = [BenchmarkProfiles]
 ```
