@@ -29,7 +29,7 @@ if !Sys.isfreebsd() # GR_jll not available, so Plots won't install
     using Plots
     T = 10 * rand(25, 3)
     labels = ["a", "b", "c"]
-    profile = performance_profile(PlotsBackend(), T, labels, linestyles=[:solid, :dash, :dot])
+    profile = performance_profile(PlotsBackend(), T, labels, linestyles = [:solid, :dash, :dot])
     @test isa(profile, Plots.Plot)
     H = rand(25, 4, 3)
     T = ones(10)

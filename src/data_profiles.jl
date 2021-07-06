@@ -9,40 +9,39 @@
 There is normally no need to call this function directly.
 See the documentation of `data_profile()` for more information.
 """
-function data_ratios(H :: Array{Float64,3}, N :: Vector{Float64}; τ :: Float64=1.0e-3)
-
+function data_ratios(H::Array{Float64, 3}, N::Vector{Float64}; τ::Float64 = 1.0e-3)
   (nf, np, ns) = size(H)
-  H[isinf.(H)] .= NaN;
-  H[H .< 0] .= NaN;
-  for j = 1 : ns
-    for i = 2 : nf
-      H[i, :, j] .= min.(H[i, :, j], H[i-1, :, j])
+  H[isinf.(H)] .= NaN
+  H[H .< 0] .= NaN
+  for j = 1:ns
+    for i = 2:nf
+      H[i, :, j] .= min.(H[i, :, j], H[i - 1, :, j])
     end
   end
 
-  prob_min = minimum(minimum(H, dims=1), dims=3)  # min for each problem
+  prob_min = minimum(minimum(H, dims = 1), dims = 3)  # min for each problem
   prob_max = H[1, :, 1]      # starting value for each problem
 
   # For each problem and solver, determine the number of costly operations
   # (e.g, objective evaluations) required to reach the cutoff value.
   T = zeros(np, ns)
-  for p = 1 : np
+  for p = 1:np
     cutoff = prob_min[p] + τ * (prob_max[p] - prob_min[p])
-    for s = 1 : ns
+    for s = 1:ns
       nfevs = findfirst(H[:, p, s] .≤ cutoff)
-      T[p, s] = nfevs == nothing ? NaN : nfevs/N[p]
+      T[p, s] = nfevs == nothing ? NaN : nfevs / N[p]
     end
   end
 
   # Replace all NaNs with twice the max ratio and sort.
   max_data = maximum(T[.!(isnan.(T))])
   T[isnan.(T)] .= 2 * max_data
-  T .= sort(T, dims=1)
+  T .= sort(T, dims = 1)
   return (T, max_data)
 end
 
 function data_profile_axis_labels(labels, ns, operations, τ; kwargs...)
-  length(labels) == 0 && (labels = ["column $col" for col = 1 : ns])
+  length(labels) == 0 && (labels = ["column $col" for col = 1:ns])
   kwargs = Dict{Symbol, Any}(kwargs)
   xlabel = pop!(kwargs, :xlabel, "Number of " * strip(operations) * @sprintf(" (thresh %7.1e)", τ))
   ylabel = pop!(kwargs, :ylabel, "Proportion of problems")
@@ -77,15 +76,17 @@ Produce a data profile using the specified backend.
 
 Other keyword arguments are passed to the plot command for the corresponding backend.
 """
-function data_profile(b::AbstractBackend,
-                      H :: Array{Float64,3},
-                      N :: Vector{Float64},
-                      labels :: Vector{S}=String[];
-                      τ :: Float64=1.0e-3,
-                      operations :: AbstractString="function evaluations",
-                      title :: AbstractString="",
-                      kwargs...) where S <: AbstractString
-  (T, max_data) = data_ratios(H, N, τ=τ)
+function data_profile(
+  b::AbstractBackend,
+  H::Array{Float64, 3},
+  N::Vector{Float64},
+  labels::Vector{S} = String[];
+  τ::Float64 = 1.0e-3,
+  operations::AbstractString = "function evaluations",
+  title::AbstractString = "",
+  kwargs...,
+) where {S <: AbstractString}
+  (T, max_data) = data_ratios(H, N, τ = τ)
   (np, ns) = size(T)
   (xlabel, ylabel, labels) = data_profile_axis_labels(labels, ns, operations, τ; kwargs...)
   xs = [1:np;] / np
