@@ -5,7 +5,7 @@ A simple package to plot performance and data profiles.
 This package containts Julia translations of original scripts by Elizabeth Dolan, Jorge Moré and Stefan Wild.
 See http://www.mcs.anl.gov/~wild/dfo/benchmarking.
 
-The original code was not accompanied by an open-source license. Jorge Moré and Stefan Wild have kindly provided their consent in writing to allow distribution of this Julia translation. See [here](https://github.com/JuliaSmoothOptimizers/BenchmarkProfiles.jl/tree/master/consent) for a full transcription.
+The original code was not accompanied by an open-source license. Jorge Moré and Stefan Wild have kindly provided their consent in writing to allow distribution of this Julia translation. See [here](https://github.com/JuliaSmoothOptimizers/BenchmarkProfiles.jl/tree/main/consent) for a full transcription.
 
 Watch out for the [pitfalls](https://dl.acm.org/citation.cfm?id=2950048) of profiles!
 
