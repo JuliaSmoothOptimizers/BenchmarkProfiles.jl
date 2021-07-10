@@ -12,4 +12,8 @@ makedocs(
   pages = ["Home" => "index.md", "Tutorial" => "tutorial.md", "Reference" => "reference.md"],
 )
 
-deploydocs(repo = "github.com/JuliaSmoothOptimizers/BenchmarkProfiles.jl.git", push_preview = true, devbranch = "main")
+deploydocs(
+  repo = "github.com/JuliaSmoothOptimizers/BenchmarkProfiles.jl.git",
+  push_preview = true,
+  devbranch = "main",
+)
