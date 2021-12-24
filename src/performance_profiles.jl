@@ -152,3 +152,45 @@ function performance_profile(
     kwargs...,
   )
 end
+"""
+    performance_profile(b,stats, cost)
+Produce a performance profile comparing solvers in `stats` using the `cost` function.
+Inputs:
+- `b :: AbstractBackend`: the backend used to produce the plot.
+- `stats::Dict{Symbol,DataFrame}`: pairs of `:solver => df`;
+- `cost::Function`: cost function applyed to each `df`. Should return a vector with the cost of solving the problem at each row;
+- if the cost is zero for at least one problem, all costs will be shifted by 1;
+- if the solver did not solve the problem, return Inf or a negative number.
+Examples of cost functions:
+- `cost(df) = df.elapsed_time`: Simple `elapsed_time` cost. Assumes the solver solved the problem.
+- `cost(df) = (df.status .!= :first_order) * Inf + df.elapsed_time`: Takes the status of the solver into consideration.
+"""
+function performance_profile(b::AbstractBackend, stats::Dict{Symbol,DataFrame}, cost, args...; kwargs...)
+  solvers = keys(stats)
+  dfs = (stats[s] for s in solvers)
+  P = hcat([cost(df) for df in dfs]...)
+  performance_profile(b, P, string.(solvers), args...; kwargs...)
+end
+
+performance_profile(b::AbstractBackend, T :: Array{Tn,2}, labels :: Vector{S}; kwargs...) where {Tn <: Number, S <: AbstractString} =
+  performance_profile(b, convert(Array{Float64,2}, T), convert(Vector{AbstractString}, labels); kwargs...)
+
+"""
+    performance_profile(b, stats, cost)
+Produce a performance profile comparing solvers in `stats` using the `cost` function.
+Inputs:
+- `b::AbstractBackend`: the backend used to produce the plot.
+- `stats::Dict{Symbol,DataFrame}`: pairs of `:solver => df`;
+- `cost::Function`: cost function applyed to each `df`. Should return a vector with the cost of solving the problem at each row;
+  - if the cost is zero for at least one problem, all costs will be shifted by 1;
+  - if the solver did not solve the problem, return Inf or a negative number.
+Examples of cost functions:
+- `cost(df) = df.elapsed_time`: Simple `elapsed_time` cost. Assumes the solver solved the problem.
+- `cost(df) = (df.status .!= :first_order) * Inf + df.elapsed_time`: Takes the status of the solver into consideration.
+"""
+function performance_profile(b::AbstractBackend, stats::Dict{Symbol,DataFrame}, cost, args...; kwargs...)
+  solvers = keys(stats)
+  dfs = (stats[s] for s in solvers)
+  P = hcat([cost(df) for df in dfs]...)
+  performance_profile(b, P, string.(solvers), args...; kwargs...)
+end

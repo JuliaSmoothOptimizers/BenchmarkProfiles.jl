@@ -3,11 +3,13 @@ uuid = "ecbce9bc-3e5e-569d-9e29-55181f61f8d0"
 version = "0.3.4"
 
 [deps]
+DataFrames = "a93c6f00-e57d-5684-b7b6-d8193f3e46c0"
 NaNMath = "77ba4419-2d1f-58cd-9bb1-8ffee604a2e3"
 Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
 Requires = "ae029012-a4dd-5104-9daa-d747884805df"
 
 [compat]
+DataFrames = "^0.22.7"
 NaNMath = "0.3"
 Requires = "1"
 julia = "^1.6"
