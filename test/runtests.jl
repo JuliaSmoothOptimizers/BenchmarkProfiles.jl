@@ -17,11 +17,11 @@ end
   T = 10 * rand(25, 3)
   labels = ["a", "b", "c"]
   profile = performance_profile(UnicodePlotsBackend(), T, labels)
-  @test isa(profile, UnicodePlots.Plot{BrailleCanvas})
+  @test isa(profile, UnicodePlots.Plot{BrailleCanvas{typeof(identity), typeof(identity)}, Val{false}, Bool})
   H = rand(25, 4, 3)
   T = ones(10)
   profile = data_profile(UnicodePlotsBackend(), H, T, labels)
-  @test isa(profile, UnicodePlots.Plot{BrailleCanvas})
+  @test isa(profile, Plot{BrailleCanvas{typeof(identity), typeof(identity)}, Val{false}, Bool})
 end
 
 if !Sys.isfreebsd() # GR_jll not available, so Plots won't install
