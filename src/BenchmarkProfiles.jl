@@ -1,5 +1,6 @@
 module BenchmarkProfiles
 
+using LaTeXStrings
 import NaNMath
 using Requires
 using Printf
@@ -29,9 +30,35 @@ end
 include("performance_profiles.jl")
 include("data_profiles.jl")
 
+"""
+Replace each number by 2^{number} in a string.
+Useful to transform axis ticks when plotting in log-base 2.
+
+Examples:
+
+    powertick("15") == "2¹⁵"
+    powertick("2.1") == "2²⋅¹"
+"""
 function powertick(s::AbstractString)
   codes = Dict(collect(".1234567890") .=> collect("⋅¹²³⁴⁵⁶⁷⁸⁹⁰"))
-  return "2" * map(c -> codes[c], s) # powertick("15") = 2¹⁵ and powertick(2.1) = "2²⋅¹"
+  return "2" * map(c -> codes[c], s)
+end
+
+"""
+Replace each number by 2^{number} in LaTeXStrings.
+Useful to transform axis ticks when plotting in log-base 2.
+
+Examples:
+
+    powertick(L"\$15\$") == L"\$2^{15}\$"
+    powertick(L"\$2.1\$") == L"\$2^{2.1}\$"
+"""
+function powertick(s::LaTeXString)
+  ex = r"[0-9.]+"
+  for m ∈ eachmatch(ex, s)
+    s = LaTeXString(replace(s, m.match => "2^{$(m.match)}"))
+  end
+  return s
 end
 
 include("requires.jl")
