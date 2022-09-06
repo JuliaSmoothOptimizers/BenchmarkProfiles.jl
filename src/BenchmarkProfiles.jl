@@ -7,13 +7,14 @@ using Printf
 
 export performance_ratios, performance_profile, performance_profile_data
 export data_ratios, data_profile
-export bp_backends, PlotsBackend, UnicodePlotsBackend
+export bp_backends, PlotsBackend, UnicodePlotsBackend, PGFPlotsXBackend
 
 abstract type AbstractBackend end
 struct PlotsBackend <: AbstractBackend end
 struct UnicodePlotsBackend <: AbstractBackend end
+struct PGFPlotsXBackend <: AbstractBackend end
 
-const bp_backends = [:PlotsBackend, :UnicodePlotsBackend]
+const bp_backends = [:PlotsBackend, :UnicodePlotsBackend, :PGFPlotsXBackend]
 
 function throw_error(b)
   throw(ArgumentError("The backend $b is not loaded. Please load the corresponding package."))
