@@ -119,4 +119,66 @@ function __init__()
       return profile
     end
   end
+
+  @require PGFPlotsX = "8314cec4-20b6-5062-9cdb-752b83310925" begin
+    function performance_profile_plot(
+      ::PGFPlotsXBackend,
+      x_plot,
+      y_plot,
+      max_ratio,
+      xlabel,
+      ylabel,
+      labels,
+      title,
+      logscale;
+      kwargs...,
+    )
+      kwargs = Dict{Symbol, Any}(kwargs)
+      linestyles = pop!(kwargs, :linestyles, Symbol[])
+      profile = Plots.plot(
+        xlabel = xlabel,
+        ylabel = ylabel,
+        title = title,
+        xlims = (logscale ? 0.0 : 1.0, 1.1 * max_ratio),
+        ylims = (0, 1.1),
+      )  # initial plot
+      for s = 1:length(labels)
+        if length(linestyles) > 0
+          kwargs[:linestyle] = linestyles[s]
+        end
+        Plots.plot!(x_plot[s], y_plot[s], t = :steppost, label = labels[s]; kwargs...)  # add to initial plot
+      end
+      if logscale
+        for xt in Plots.xticks(profile)
+          xtL = [L"2^{%$str_xt}" for str_xt in xt[2]]
+          Plots.plot!(xticks = (xt[1], xtL))
+          Plots.plot!(xtickfontsize = 10)
+        end
+      end
+      return profile
+    end
+
+    function data_profile_plot(
+      ::PGFPlotsXBackend,
+      T,
+      xs,
+      max_data,
+      xlabel,
+      ylabel,
+      labels,
+      title;
+      kwargs...,
+    )
+      profile = Plots.plot()  # initial empty plot
+      for s = 1:size(T, 2)
+        Plots.plot!(T[:, s], xs, t = :steppost, label = labels[s]; kwargs...)
+      end
+      Plots.xlims!(0.0, 1.1 * max_data)
+      Plots.ylims!(0, 1.1)
+      Plots.xlabel!(xlabel)
+      Plots.ylabel!(ylabel)
+      Plots.title!(title)
+      return profile
+    end
+  end
 end
