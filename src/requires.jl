@@ -35,7 +35,10 @@ function __init__()
         Plots.plot!(x_plot[s], y_plot[s], t = :steppost, label = labels[s]; kwargs...)  # add to initial plot
       end
       if logscale
+        @show Plots.xticks(profile)
         for xt in Plots.xticks(profile)
+          @show xt[1], xt[2]
+          @show map(x -> powertick(x), xt[2])
           Plots.plot!(xticks = (xt[1], map(x -> powertick(x), xt[2])))
           Plots.plot!(xtickfontsize = 10)
         end
