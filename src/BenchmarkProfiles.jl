@@ -39,10 +39,20 @@ Examples:
 
     powertick("15") == "2¹⁵"
     powertick("2.1") == "2²⋅¹"
+    powertick("\$0\$") == "\$2^0\$"
 """
 function powertick(s::AbstractString)
   codes = Dict(collect(".1234567890") .=> collect("⋅¹²³⁴⁵⁶⁷⁸⁹⁰"))
-  return "2" * map(c -> codes[c], s)
+  hidden_latex = !isnothing(match(r"^\$.*\$$", s))
+  ex = r"[0-9.]+"
+  for m ∈ eachmatch(ex, s)
+    s = if hidden_latex
+      replace(s, m.match => "2^{$(m.match)}")
+    else
+      replace(s, m.match => "2" * map(c -> codes[c], m.match))
+    end
+  end
+  return s
 end
 
 """
