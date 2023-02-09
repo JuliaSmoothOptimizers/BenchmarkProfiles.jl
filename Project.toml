@@ -1,6 +1,6 @@
 name = "BenchmarkProfiles"
 uuid = "ecbce9bc-3e5e-569d-9e29-55181f61f8d0"
-version = "0.4.2"
+version = "0.4.3"
 
 [deps]
 LaTeXStrings = "b964fa9f-0449-5b57-a5c2-d3ea65f4040f"
