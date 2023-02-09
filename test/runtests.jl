@@ -5,6 +5,8 @@ using Test
 @testset "powertick" begin
   @test BenchmarkProfiles.powertick("15") == "2¹⁵"
   @test BenchmarkProfiles.powertick("2.1") == "2²⋅¹"
+  @test BenchmarkProfiles.powertick("\$15\$") == "\$2^{15}\$"
+  @test BenchmarkProfiles.powertick("\$2.1\$") == "\$2^{2.1}\$"
   @test BenchmarkProfiles.powertick(L"$15$") == L"$2^{15}$"
   @test BenchmarkProfiles.powertick(L"$2.1$") == L"$2^{2.1}$"
 end
