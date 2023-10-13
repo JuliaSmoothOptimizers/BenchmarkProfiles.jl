@@ -156,8 +156,7 @@ function performance_profile(
 end
 
 """
-export_performance_profile(T, filename; solver_names = [], header, kwargs...)
-export_performance_profile(T, filename; solver_names = [], header, kwargs...)
+  export_performance_profile(T; solver_names = [], logscale::Bool = true, sampletol=0.0, drawtol=0.0,)
 
 Export a performance profile plot data as .csv file. Profiles data are padded with `NaN` to ensure .csv consistency.
 Export a performance profile plot data as .csv file. Profiles data are padded with `NaN` to ensure .csv consistency.
