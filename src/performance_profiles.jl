@@ -190,7 +190,6 @@ function export_performance_profile(
   y_mat = hcat(y_data...)
 
   isempty(solver_names) && (solver_names = ["solver_$i" for i = 1:nsolvers])
-  @show nsolvers solver_names
 
   header = vcat([[sname*"_x",sname*"_y"] for sname in solver_names]...)
   data = Matrix{Float64}(undef,max_elem,nsolvers*2)
