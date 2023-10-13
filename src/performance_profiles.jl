@@ -4,6 +4,8 @@
 #
 # D. Orban, 2015, 2016.
 
+using CSV, Tables
+
 """Compute performance ratios used to produce a performance profile.
 
 There is normally no need to call this function directly.
@@ -151,4 +153,50 @@ function performance_profile(
     logscale;
     kwargs...,
   )
+end
+
+"""
+export_performance_profile(T; solver_names = [], logscale::Bool = true, sampletol=0.0, drawtol=0.0,)
+
+Export a performance profile plot data as .csv file. Profiles data are padded with NaN to ensure .csv consistency.
+
+## Arguments
+
+* `T :: Matrix{Float64}`: each column of `T` defines the performance data for a solver (smaller is better).
+  Failures on a given problem are represented by a negative value, an infinite value, or `NaN`.
+* `filename :: String` : path to the export file.
+
+## Keyword Arguments
+
+* `solver_names :: Vector{S}` : names of the solvers
+
+Other keyword arguments are passed `performance_profile_data`.
+"""
+function export_performance_profile(
+  T::Matrix{Float64},
+  filename::String;
+  solver_names::Vector{S} = String[],
+  kwargs...
+) where {S <: AbstractString}
+  nsolvers = size(T)[2]
+
+  x_data, y_data, max_ratio = performance_profile_data(T,kwargs...)
+  max_elem = maximum(length.(x_data))
+  for i in eachindex(x_data)
+    append!(x_data[i],[NaN for i=1:max_elem-length(x_data[i])])
+    append!(y_data[i],[NaN for i=1:max_elem-length(y_data[i])])
+  end
+  x_mat = hcat(x_data...)
+  y_mat = hcat(y_data...)
+
+  isempty(solver_names) && (solver_names = ["solver_$i" for i = 1:nsolvers])
+  @show nsolvers solver_names
+
+  header = vcat([[sname*"_x",sname*"_y"] for sname in solver_names]...)
+  data = Matrix{Float64}(undef,max_elem,nsolvers*2)
+  for i =0:nsolvers-1
+    data[:,2*i+1] .= x_mat[:,i+1]
+    data[:,2*i+2] .= y_mat[:,i+1]
+  end
+  CSV.write(filename,Tables.table(data),header=header)
 end

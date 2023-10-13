@@ -5,7 +5,7 @@ import NaNMath
 using Requires
 using Printf
 
-export performance_ratios, performance_profile, performance_profile_data
+export performance_ratios, performance_profile, performance_profile_data, export_performance_profile
 export data_ratios, data_profile
 export bp_backends, PlotsBackend, UnicodePlotsBackend, PGFPlotsXBackend
 
