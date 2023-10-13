@@ -170,7 +170,7 @@ Export a performance profile plot data as .csv file. Profiles data are padded wi
 
 * `solver_names :: Vector{S}` : names of the solvers
 
-Other keyword arguments are passed `performance_profile_data`.
+Other keyword arguments are passed to `performance_profile_data`.
 """
 function export_performance_profile(
   T::Matrix{Float64},
