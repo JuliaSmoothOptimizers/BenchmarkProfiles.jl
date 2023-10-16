@@ -156,9 +156,9 @@ function performance_profile(
 end
 
 """
-export_performance_profile(T; solver_names = [], logscale::Bool = true, sampletol=0.0, drawtol=0.0,)
+export_performance_profile(T, filename; solver_names = [], header, kwargs...)
 
-Export a performance profile plot data as .csv file. Profiles data are padded with NaN to ensure .csv consistency.
+Export a performance profile plot data as .csv file. Profiles data are padded with `NaN` to ensure .csv consistency.
 
 ## Arguments
 
@@ -169,18 +169,24 @@ Export a performance profile plot data as .csv file. Profiles data are padded wi
 ## Keyword Arguments
 
 * `solver_names :: Vector{S}` : names of the solvers
+* `header::Vector{String}`: Contains .csv file(s) column names for each files. Note that `header` value does not change columns order in .csv exported files (see Output).
 
 Other keyword arguments are passed `performance_profile_data`.
+
+Output:
+File containing profile data in .csv format. The names of the files contain the name of the cost, and the columns are solver1_x, solver1_y, solver2_x, ... by default or 
+
 """
 function export_performance_profile(
   T::Matrix{Float64},
   filename::String;
   solver_names::Vector{S} = String[],
+  header::Vector{S} = String[],
   kwargs...
 ) where {S <: AbstractString}
   nsolvers = size(T)[2]
 
-  x_data, y_data, max_ratio = performance_profile_data(T,kwargs...)
+  x_data, y_data, max_ratio = performance_profile_data(T;kwargs...)
   max_elem = maximum(length.(x_data))
   for i in eachindex(x_data)
     append!(x_data[i],[NaN for i=1:max_elem-length(x_data[i])])
@@ -190,9 +196,12 @@ function export_performance_profile(
   y_mat = hcat(y_data...)
 
   isempty(solver_names) && (solver_names = ["solver_$i" for i = 1:nsolvers])
-  @show nsolvers solver_names
 
-  header = vcat([[sname*"_x",sname*"_y"] for sname in solver_names]...)
+  if !isempty(header)
+    header_l = size(T)[2]*2
+    length(header) == header_l || error("Header should contain $(header_l) elements")
+    header = vcat([[sname*"_x",sname*"_y"] for sname in solver_names]...)
+  end
   data = Matrix{Float64}(undef,max_elem,nsolvers*2)
   for i =0:nsolvers-1
     data[:,2*i+1] .= x_mat[:,i+1]
