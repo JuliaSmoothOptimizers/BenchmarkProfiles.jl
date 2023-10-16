@@ -71,5 +71,8 @@ if !Sys.isfreebsd() # GR_jll not available, so Plots won't install
     export_performance_profile(T, filename, header = ["" for _ = 1:(size(T, 2) * 2)])
     @test isfile(filename)
     rm(filename)
+    export_performance_profile(T,filename,header = ["" for _=1:size(T,2)*2])
+    @test isfile(filename)
+    rm(filename)
   end
 end
