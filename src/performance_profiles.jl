@@ -169,7 +169,7 @@ Export a performance profile plot data as .csv file. Profiles data are padded wi
 ## Keyword Arguments
 
 * `solver_names :: Vector{S}` : names of the solvers
-- `header::Vector{String}`: Contains .csv file column names. Note that `header` value does not change columns order in .csv exported files (see Output).
+* `header::Vector{String}`: Contains .csv file column names. Note that `header` value does not change columns order in .csv exported files (see Output).
 
 Other keyword arguments are passed `performance_profile_data`.
 
