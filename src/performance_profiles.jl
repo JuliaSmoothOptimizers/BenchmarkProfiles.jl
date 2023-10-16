@@ -169,13 +169,8 @@ Export a performance profile plot data as .csv file. Profiles data are padded wi
 ## Keyword Arguments
 
 * `solver_names :: Vector{S}` : names of the solvers
-* `header::Vector{String}`: Contains .csv file(s) column names for each files. Note that `header` value does not change columns order in .csv exported files (see Output).
 
 Other keyword arguments are passed `performance_profile_data`.
-
-Output:
-File containing profile data in .csv format. The names of the files contain the name of the cost, and the columns are solver1_x, solver1_y, solver2_x, ... by default or 
-
 """
 function export_performance_profile(
   T::Matrix{Float64},
