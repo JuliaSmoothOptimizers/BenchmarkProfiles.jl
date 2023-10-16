@@ -157,7 +157,9 @@ end
 
 """
 export_performance_profile(T, filename; solver_names = [], header, kwargs...)
+export_performance_profile(T, filename; solver_names = [], header, kwargs...)
 
+Export a performance profile plot data as .csv file. Profiles data are padded with `NaN` to ensure .csv consistency.
 Export a performance profile plot data as .csv file. Profiles data are padded with `NaN` to ensure .csv consistency.
 
 ## Arguments
@@ -174,6 +176,10 @@ Export a performance profile plot data as .csv file. Profiles data are padded wi
 Other keyword arguments are passed `performance_profile_data`.
 
 Output:
+File containing profile data in .csv format. The names of the files contain the name of the cost, and the columns are solver1_x, solver1_y, solver2_x, ... by default or 
+
+
+Output:
 File containing profile data in .csv format. Columns are solver1_x, solver1_y, solver2_x, ...
 """
 function export_performance_profile(
@@ -185,6 +191,7 @@ function export_performance_profile(
 ) where {S <: AbstractString}
   nsolvers = size(T)[2]
 
+  x_data, y_data, max_ratio = performance_profile_data(T;kwargs...)
   x_data, y_data, max_ratio = performance_profile_data(T; kwargs...)
   max_elem = maximum(length.(x_data))
   for i in eachindex(x_data)
@@ -195,6 +202,16 @@ function export_performance_profile(
   y_mat = hcat(y_data...)
 
   isempty(solver_names) && (solver_names = ["solver_$i" for i = 1:nsolvers])
+
+  if !isempty(header)
+    header_l = size(T)[2]*2
+    length(header) == header_l || error("Header should contain $(header_l) elements")
+    header = vcat([[sname*"_x",sname*"_y"] for sname in solver_names]...)
+  end
+  data = Matrix{Float64}(undef,max_elem,nsolvers*2)
+  for i =0:nsolvers-1
+    data[:,2*i+1] .= x_mat[:,i+1]
+    data[:,2*i+2] .= y_mat[:,i+1]
 
   if !isempty(header)
     header_l = size(T)[2] * 2
