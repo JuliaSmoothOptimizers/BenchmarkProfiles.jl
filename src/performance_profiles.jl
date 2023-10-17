@@ -181,15 +181,15 @@ function export_performance_profile(
   filename::String;
   solver_names::Vector{S} = String[],
   header::Vector{S} = String[],
-  kwargs...
+  kwargs...,
 ) where {S <: AbstractString}
   nsolvers = size(T)[2]
 
-  x_data, y_data, max_ratio = performance_profile_data(T;kwargs...)
+  x_data, y_data, max_ratio = performance_profile_data(T; kwargs...)
   max_elem = maximum(length.(x_data))
   for i in eachindex(x_data)
-    append!(x_data[i],[NaN for i=1:max_elem-length(x_data[i])])
-    append!(y_data[i],[NaN for i=1:max_elem-length(y_data[i])])
+    append!(x_data[i], [NaN for i = 1:(max_elem - length(x_data[i]))])
+    append!(y_data[i], [NaN for i = 1:(max_elem - length(y_data[i]))])
   end
   x_mat = hcat(x_data...)
   y_mat = hcat(y_data...)
@@ -197,14 +197,14 @@ function export_performance_profile(
   isempty(solver_names) && (solver_names = ["solver_$i" for i = 1:nsolvers])
 
   if !isempty(header)
-    header_l = size(T)[2]*2
+    header_l = size(T)[2] * 2
     length(header) == header_l || error("Header should contain $(header_l) elements")
-    header = vcat([[sname*"_x",sname*"_y"] for sname in solver_names]...)
+    header = vcat([[sname * "_x", sname * "_y"] for sname in solver_names]...)
   end
-  data = Matrix{Float64}(undef,max_elem,nsolvers*2)
-  for i =0:nsolvers-1
-    data[:,2*i+1] .= x_mat[:,i+1]
-    data[:,2*i+2] .= y_mat[:,i+1]
+  data = Matrix{Float64}(undef, max_elem, nsolvers * 2)
+  for i = 0:(nsolvers - 1)
+    data[:, 2 * i + 1] .= x_mat[:, i + 1]
+    data[:, 2 * i + 2] .= y_mat[:, i + 1]
   end
-  CSV.write(filename,Tables.table(data),header=header)
+  CSV.write(filename, Tables.table(data), header = header)
 end

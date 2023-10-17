@@ -65,10 +65,10 @@ if !Sys.isfreebsd() # GR_jll not available, so Plots won't install
   @testset "csv export" begin
     T = 10 * rand(25, 3)
     filename = "data.csv"
-    export_performance_profile(T,filename)
+    export_performance_profile(T, filename)
     @test isfile(filename)
     rm(filename)
-    export_performance_profile(T,filename,header = ["" for _=1:size(T,2)*2])
+    export_performance_profile(T, filename, header = ["" for _ = 1:(size(T, 2) * 2)])
     @test isfile(filename)
     rm(filename)
   end
