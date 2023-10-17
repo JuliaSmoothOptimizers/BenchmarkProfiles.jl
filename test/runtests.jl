@@ -61,4 +61,15 @@ if !Sys.isfreebsd() # GR_jll not available, so Plots won't install
     profile = data_profile(PGFPlotsXBackend(), H, T, labels)
     @test isa(profile, Plots.Plot)
   end
+
+  @testset "csv export" begin
+    T = 10 * rand(25, 3)
+    filename = "data.csv"
+    export_performance_profile(T,filename)
+    @test isfile(filename)
+    rm(filename)
+    export_performance_profile(T,filename,header = ["" for _=1:size(T,2)*2])
+    @test isfile(filename)
+    rm(filename)
+  end
 end
