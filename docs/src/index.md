@@ -33,6 +33,17 @@ julia> performance_profile(PlotsBackend(), T, ["Solver 1", "Solver 2", "Solver 3
 
 ![Performance Profile](assets/random_profile.png)
 
+## Supported Backends
+
+Currently supported backends are:
+
+* [Plots.jl](https://github.com/JuliaPlots/Plots.jl);
+* [UnicodePlots.jl](https://github.com/JuliaPlots/UnicodePlots.jl);
+* [PGFPlotsX.jl](https://github.com/KristofferC/PGFPlotsX.jl).
+
+Backends are treated as optional dependencies, but one is required to produce a plot.
+The user should import one of the supported backends before calling one of the plotting functions.
+
 ## Adding a New Backend
 
 In order to add a new backend, there are two steps:
