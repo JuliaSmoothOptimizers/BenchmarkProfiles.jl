@@ -75,4 +75,11 @@ if !Sys.isfreebsd() # GR_jll not available, so Plots won't install
     @test isfile(filename)
     rm(filename)
   end
+  @testset "tikz export" begin
+    T = 10 * rand(25, 3)
+    filename = "tikz_fig.tex"
+    export_performance_profile_tikz(T,filename)
+    @test isfile(filename)
+    rm(filename)
+  end
 end
