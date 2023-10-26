@@ -183,11 +183,11 @@ Export a performance profile plot data as .csv file. Profiles data are padded wi
 
 * `T :: Matrix{Float64}`: each column of `T` defines the performance data for a solver (smaller is better).
   Failures on a given problem are represented by a negative value, an infinite value, or `NaN`.
-* `filename :: String` : path to the export file.
+* `filename :: String` : path to the exported file.
 
 ## Keyword Arguments
 
-* `solver_names :: Vector{S}` : names of the solvers
+* `solver_names :: Vector{S}` : names of the solvers.
 - `header::Vector{String}`: Contains .csv file column names. Note that `header` value does not change columns order in .csv exported files (see Output).
 
 Other keyword arguments are passed to `performance_profile_data`.
@@ -216,13 +216,14 @@ function export_performance_profile(
   for i =0:nsolvers-1
     data[:,2*i+1] .= x_mat[:,i+1]
     data[:,2*i+2] .= y_mat[:,i+1]
+  end
 
   if !isempty(header)
     header_l = size(T)[2] * 2
     length(header) == header_l || error("Header should contain $(header_l) elements")
     header = vcat([[sname * "_x", sname * "_y"] for sname in solver_names]...)
   end
-  data = Matrix{Float64}(undef, max_elem, nsolvers * 2)
+  data = Matrix{Float64}(undef, size(x_mat,1), nsolvers * 2)
   for i = 0:(nsolvers - 1)
     data[:, 2 * i + 1] .= x_mat[:, i + 1]
     data[:, 2 * i + 2] .= y_mat[:, i + 1]
