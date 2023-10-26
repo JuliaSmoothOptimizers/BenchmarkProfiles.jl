@@ -6,6 +6,8 @@
 
 using CSV, Tables
 
+using CSV, Tables
+
 """Compute performance ratios used to produce a performance profile.
 
 There is normally no need to call this function directly.
