@@ -6,6 +6,7 @@ using Requires
 using Printf
 
 export performance_ratios, performance_profile, performance_profile_data, export_performance_profile
+export export_performance_profile_tikz
 export data_ratios, data_profile
 export bp_backends, PlotsBackend, UnicodePlotsBackend, PGFPlotsXBackend
 
@@ -30,6 +31,7 @@ end
 
 include("performance_profiles.jl")
 include("data_profiles.jl")
+include("tikz_export.jl")
 
 """
 Replace each number by 2^{number} in a string.
