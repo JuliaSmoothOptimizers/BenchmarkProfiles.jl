@@ -22,7 +22,7 @@ Export tikz figure of the performance profiles given by `T` in `filename`.
 * `colours::Vector{String} = []` : colours of the plots, should have as many elements as the number of columns of `T`.
 * `linestyles::Vector{String} = []` : line style (dashed, dotted, ...) of the plots, should have as many elements as the number of columns of `T`.
 * `linewidth::AbstractFloat = 1.0` : line width of the plots.
-* `xlabel::String = ""` : x axis label. If empty, uses the one returns by `performance_profile_axis_labels`.
+* `xlabel::String = ""` : x-axis label. If empty, uses the one returned by `performance_profile_axis_labels`.
 * `ylabel::String = ""` : x axis label. If empty, uses the one returns by `performance_profile_axis_labels`.
 
 Other keyword arguments are passed `performance_profile_data`.
