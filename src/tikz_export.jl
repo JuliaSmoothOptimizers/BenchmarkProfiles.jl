@@ -24,7 +24,13 @@ Export tikz figure of the performance profiles given by `T` in `filename`.
 * `linewidth::AbstractFloat = 1.0` : line with of the plots.
 * `xlabel::String = ""` : x axis label. If empty, uses the one returns by `performance_profile_axis_labels`.
 * `ylabel::String = ""` : x axis label. If empty, uses the one returns by `performance_profile_axis_labels`.
-
+* `axis_tick_length::AbstractFloat = 0.2` : axis graduation tick length.
+* `lgd_pos::Vector = [xlim+0.5,ylim]`, : legend box top left corner coordinates, by default legend is on the left had side of the figure.
+* `lgd_plot_length::AbstractFloat = 0.7` : legend curve plot length.
+* `lgd_v_offset::AbstractFloat = 0.7` : vertical space between two legend items.
+* `lgd_plot_offset::AbstractFloat = 0.1` : space between legend box left side and curve plot.
+* `lgd_box_length::AbstractFloat = 3.` : legend box horizontal length.
+* `label_val::Vector = [0.2,0.25,0.5,1]` : possible graduation labels along axes are multiples of label_val elements times 10^n (n is automatically selected). 
 Other keyword arguments are passed `performance_profile_data`.
 
 """
@@ -43,6 +49,13 @@ function export_performance_profile_tikz(
   linewidth::AbstractFloat = 1.0,
   xlabel::String = "",
   ylabel::String = "",
+  axis_tick_length::AbstractFloat = 0.2,
+  lgd_pos::Vector = [xlim+0.5,ylim],
+  lgd_plot_length::AbstractFloat = 0.7,
+  lgd_v_offset::AbstractFloat = 0.7,
+  lgd_plot_offset::AbstractFloat = 0.1,
+  lgd_box_length::AbstractFloat = 3.,
+  label_val::Vector = [0.2,0.25,0.5,1],
   kwargs...)
 
 
@@ -55,16 +68,7 @@ function export_performance_profile_tikz(
   isempty(xlabel) && (xlabel=xlabel_def)
   isempty(ylabel) && (ylabel=ylabel_def)
 
-  # some offsets
-  axis_tik_l = 0.2 # tick length
-  lgd_offset = 0.5 # space between figure and legend box
-  lgd_box_length = 3. # legend box length
-  lgd_plot_length = 0.7 # legend plot length
-  lgd_v_offset = 0.7 # vertical space between legend items 
-
-  label_val = [0.2,0.25,0.5,1] # possible graduation labels along axes are multiples of label_val elements times 10^n
-  ymax = 1.0
-  y_grad = collect(0.:ymax/(nygrad-1):ymax)
+  y_grad = collect(0.:1.0/(nygrad-1):1.0)
 
   isempty(colours) && (colours = ["black" for _ =1:size(T,2)])
   isempty(linestyles) && (linestyles = ["solid" for _ =1:size(T,2)])
@@ -78,8 +82,16 @@ function export_performance_profile_tikz(
   _, ind = findmin(abs.(n .- round.(n)))
   xgrad_dist = label_val[ind]*10^round(n[ind])
   x_grad = [0. , [xgrad_dist*i for i =1 : nxgrad-1]...]
-  #x_grad[end] <= xmax || (pop!(x_grad))
   xmax=max(x_grad[end],xmax)
+  
+  # get nice looking graduation on y axis
+  dist = 1.0/(nygrad-1)
+  n=log.(10,dist./label_val)
+  _, ind = findmin(abs.(n .- round.(n)))
+  ygrad_dist = label_val[ind]*10^round(n[ind])
+  y_grad = [0. , [ygrad_dist*i for i =1 : nygrad-1]...]
+  ymax=max(y_grad[end],1.0)
+  
   to_int(x) = isinteger(x) ? Int(x) : x
 
   xratio = xlim/xmax
@@ -94,15 +106,15 @@ function export_performance_profile_tikz(
     # axes graduations and labels,
     if logscale
       for i in eachindex(x_grad)
-        println(io, "\\draw[line width=$linewidth] ($(x_grad[i]*xratio),0) -- ($(x_grad[i]*xratio),$axis_tik_l) node [pos=0, below] {\$2^{$(to_int(x_grad[i]))}\$};")
+        println(io, "\\draw[line width=$linewidth] ($(x_grad[i]*xratio),0) -- ($(x_grad[i]*xratio),$axis_tick_length) node [pos=0, below] {\$2^{$(to_int(x_grad[i]))}\$};")
       end
     else
       for i in eachindex(x_grad)
-        println(io, "\\draw[line width=$linewidth] ($(x_grad[i]*xratio),0) -- ($(x_grad[i]*xratio),$axis_tik_l) node [pos=0, below] {$(to_int(x_grad[i]))};")
+        println(io, "\\draw[line width=$linewidth] ($(x_grad[i]*xratio),0) -- ($(x_grad[i]*xratio),$axis_tick_length) node [pos=0, below] {$(to_int(x_grad[i]))};")
       end
     end
     for i in eachindex(y_grad)
-      println(io, "\\draw[line width=$linewidth] (0,$(y_grad[i]*yratio)) -- ($axis_tik_l,$(y_grad[i]*yratio)) node [pos=0, left] {$(to_int(y_grad[i]))};")
+      println(io, "\\draw[line width=$linewidth] (0,$(y_grad[i]*yratio)) -- ($axis_tick_length,$(y_grad[i]*yratio)) node [pos=0, left] {$(to_int(y_grad[i]))};")
     end
     # grid
     if grid
@@ -138,7 +150,7 @@ function export_performance_profile_tikz(
     # legend
     for j in eachindex(solvernames) 
       legcmd = "\\draw[$(colours[j]), $(linestyles[j]), line width = $linewidth] "
-      legcmd *= "($(xlim+lgd_offset),$(ylim-j*lgd_v_offset)) -- ($(xlim+lgd_offset+lgd_plot_length),$(ylim-j*lgd_v_offset)) node [black,pos=1,right] {$(String(solvernames[j]))}"
+      legcmd *= "($(lgd_pos[1]+lgd_plot_offset),$(lgd_pos[2]-j*lgd_v_offset)) -- ($(lgd_pos[1]+lgd_plot_offset+lgd_plot_length),$(lgd_pos[2]-j*lgd_v_offset)) node [black,pos=1,right] {$(String(solvernames[j]))}"
       # if !isempty(markers)
       #   legcmd *= " node [midway,draw,$(markers[j]),solid] {}"
       # end
@@ -147,7 +159,7 @@ function export_performance_profile_tikz(
       println(io,legcmd)
     end
     # legend box
-    println(io,"\\draw[line width=$linewidth] ($(xlim+lgd_offset-0.1),$ylim) -- ($(xlim+lgd_offset+lgd_box_length),$ylim) -- ($(xlim+lgd_offset+lgd_box_length),$(ylim-lgd_v_offset*(length(solvernames)+1))) -- ($(xlim+lgd_offset-0.1),$(ylim-lgd_v_offset*(length(solvernames)+1))) -- cycle;")
+    println(io,"\\draw[line width=$linewidth] ($(lgd_pos[1]),$(lgd_pos[2])) -- ($(lgd_pos[1]+lgd_box_length),$(lgd_pos[2])) -- ($(lgd_pos[1]+lgd_box_length),$(lgd_pos[2]-lgd_v_offset*(length(solvernames)+1))) -- ($(lgd_pos[1]),$(lgd_pos[2]-lgd_v_offset*(length(solvernames)+1))) -- cycle;")
     println(io,"\\end{tikzpicture}")
   end
 end
