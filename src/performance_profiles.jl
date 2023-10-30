@@ -160,7 +160,7 @@ end
 """
     function performance_profile_data_mat(T;kwargs...)
 
-Retruns `performance_profile_data` output (vectors) as matrices. Matrices are padded with NaN if necessary.
+Returns `performance_profile_data` output (vectors) as matrices. Matrices are padded with NaN if necessary.
 """
 function performance_profile_data_mat(T::Matrix{Float64};kwargs...)
   x_data, y_data, max_ratio = performance_profile_data(T;kwargs...)
