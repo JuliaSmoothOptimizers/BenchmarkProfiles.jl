@@ -25,7 +25,7 @@ Export tikz figure of the performance profiles given by `T` in `filename`.
 * `xlabel::String = ""` : x-axis label. If empty, uses the one returned by `performance_profile_axis_labels`.
 * `ylabel::String = ""` : y-axis label. If empty, uses the one returned by `performance_profile_axis_labels`.
 
-Other keyword arguments are passed `performance_profile_data`.
+Other keyword arguments are passed to `performance_profile_data`.
 
 """
 function export_performance_profile_tikz(
