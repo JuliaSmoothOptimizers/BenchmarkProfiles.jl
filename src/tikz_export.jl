@@ -21,9 +21,9 @@ Export tikz figure of the performance profiles given by `T` in `filename`.
 * `grid::Bool=true` : display grid if true.
 * `colours::Vector{String} = []` : colours of the plots, should have as many elements as the number of columns of `T`.
 * `linestyles::Vector{String} = []` : line style (dashed, dotted, ...) of the plots, should have as many elements as the number of columns of `T`.
-* `linewidth::AbstractFloat = 1.0` : line with of the plots.
-* `xlabel::String = ""` : x axis label. If empty, uses the one returns by `performance_profile_axis_labels`.
-* `ylabel::String = ""` : x axis label. If empty, uses the one returns by `performance_profile_axis_labels`.
+* `linewidth::AbstractFloat = 1.0` : line width of the plots.
+* `xlabel::String = ""` : x-axis label. If empty, uses the one returned by `performance_profile_axis_labels`.
+* `ylabel::String = ""` : y-axis label. If empty, uses the one returned by `performance_profile_axis_labels`.
 * `axis_tick_length::AbstractFloat = 0.2` : axis graduation tick length.
 * `lgd_pos::Vector = [xlim+0.5,ylim]`, : legend box top left corner coordinates, by default legend is on the left had side of the figure.
 * `lgd_plot_length::AbstractFloat = 0.7` : legend curve plot length.
@@ -31,7 +31,7 @@ Export tikz figure of the performance profiles given by `T` in `filename`.
 * `lgd_plot_offset::AbstractFloat = 0.1` : space between legend box left side and curve plot.
 * `lgd_box_length::AbstractFloat = 3.` : legend box horizontal length.
 * `label_val::Vector = [0.2,0.25,0.5,1]` : possible graduation labels along axes are multiples of label_val elements times 10^n (n is automatically selected). 
-Other keyword arguments are passed `performance_profile_data`.
+Other keyword arguments are passed to `performance_profile_data`.
 
 """
 function export_performance_profile_tikz(
