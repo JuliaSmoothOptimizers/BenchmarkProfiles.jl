@@ -158,7 +158,7 @@ function performance_profile(
 end
 
 """
-    function performance_profile_data_mat(T;kwargs...)
+    performance_profile_data_mat(T; kwargs...)
 
 Returns `performance_profile_data` output (vectors) as matrices. Matrices are padded with NaN if necessary.
 """
