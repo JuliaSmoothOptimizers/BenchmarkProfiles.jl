@@ -34,6 +34,8 @@ Export tikz figure of the performance profiles given by `T` in `filename`.
 * `lgd_plot_offset::AbstractFloat = 0.1` : space between legend box left side and curve plot.
 * `lgd_box_length::AbstractFloat = 3.` : legend box horizontal length.
 * `label_val::Vector = [0.2,0.25,0.5,1]` : possible graduation labels along axes are multiples of label_val elements times 10^n (n is automatically selected).
+* `logscale::Bool = true` : produce a logarithmic (base 2) performance plot.
+
 Other keyword arguments are passed to `performance_profile_data`.
 
 """
@@ -60,12 +62,9 @@ function export_performance_profile_tikz(
   lgd_plot_offset::AbstractFloat = 0.1,
   lgd_box_length::AbstractFloat = 3.,
   label_val::Vector = [0.2,0.25,0.5,1],
+  logscale::Bool = true,
   kwargs...)
 
-  logscale = true
-  if haskey(kwargs,:logscale)
-    logscale = kwargs[:logscale]
-  end
   xlabel_def, ylabel_def, solvernames = performance_profile_axis_labels(solvernames, size(T, 2), logscale; kwargs...)
   isempty(xlabel) && (xlabel=xlabel_def)
   isempty(ylabel) && (ylabel=ylabel_def)
