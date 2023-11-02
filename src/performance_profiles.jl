@@ -6,6 +6,8 @@
 
 using CSV, Tables
 
+using CSV, Tables
+
 """Compute performance ratios used to produce a performance profile.
 
 There is normally no need to call this function directly.
@@ -156,6 +158,23 @@ function performance_profile(
 end
 
 """
+    performance_profile_data_mat(T; kwargs...)
+
+Returns `performance_profile_data` output (vectors) as matrices. Matrices are padded with NaN if necessary.
+"""
+function performance_profile_data_mat(T::Matrix{Float64};kwargs...)
+  x_data, y_data, max_ratio = performance_profile_data(T;kwargs...)
+  max_elem = maximum(length.(x_data))
+  for i in eachindex(x_data)
+    append!(x_data[i],[NaN for i=1:max_elem-length(x_data[i])])
+    append!(y_data[i],[NaN for i=1:max_elem-length(y_data[i])])
+  end
+  x_mat = hcat(x_data...)
+  y_mat = hcat(y_data...)
+  return x_mat, y_mat
+end
+
+"""
 export_performance_profile(T, filename; solver_names = [], header, kwargs...)
 
 Export a performance profile plot data as .csv file. Profiles data are padded with `NaN` to ensure .csv consistency.
@@ -164,14 +183,14 @@ Export a performance profile plot data as .csv file. Profiles data are padded wi
 
 * `T :: Matrix{Float64}`: each column of `T` defines the performance data for a solver (smaller is better).
   Failures on a given problem are represented by a negative value, an infinite value, or `NaN`.
-* `filename :: String` : path to the export file.
+* `filename :: String` : path to the exported file.
 
 ## Keyword Arguments
 
-* `solver_names :: Vector{S}` : names of the solvers
-* `header::Vector{String}`: Contains .csv file column names. Note that `header` value does not change columns order in .csv exported files (see Output).
+- `solver_names :: Vector{S}` : names of the solvers.
+- `header::Vector{String}`: Contains .csv file column names. Note that `header` value does not change columns order in .csv exported files (see Output).
 
-Other keyword arguments are passed `performance_profile_data`.
+Other keyword arguments are passed to `performance_profile_data`.
 
 Output:
 File containing profile data in .csv format. Columns are solver1_x, solver1_y, solver2_x, ...
@@ -185,23 +204,26 @@ function export_performance_profile(
 ) where {S <: AbstractString}
   nsolvers = size(T)[2]
 
-  x_data, y_data, max_ratio = performance_profile_data(T; kwargs...)
-  max_elem = maximum(length.(x_data))
-  for i in eachindex(x_data)
-    append!(x_data[i], [NaN for i = 1:(max_elem - length(x_data[i]))])
-    append!(y_data[i], [NaN for i = 1:(max_elem - length(y_data[i]))])
-  end
-  x_mat = hcat(x_data...)
-  y_mat = hcat(y_data...)
-
+  x_mat, y_mat = performance_profile_data_mat(T;kwargs...)
   isempty(solver_names) && (solver_names = ["solver_$i" for i = 1:nsolvers])
+
+  if !isempty(header)
+    header_l = size(T)[2]*2
+    length(header) == header_l || error("Header should contain $(header_l) elements")
+    header = vcat([[sname*"_x",sname*"_y"] for sname in solver_names]...)
+  end
+  data = Matrix{Float64}(undef,size(x_mat,1),nsolvers*2)
+  for i =0:nsolvers-1
+    data[:,2*i+1] .= x_mat[:,i+1]
+    data[:,2*i+2] .= y_mat[:,i+1]
+  end
 
   if !isempty(header)
     header_l = size(T)[2] * 2
     length(header) == header_l || error("Header should contain $(header_l) elements")
     header = vcat([[sname * "_x", sname * "_y"] for sname in solver_names]...)
   end
-  data = Matrix{Float64}(undef, max_elem, nsolvers * 2)
+  data = Matrix{Float64}(undef, size(x_mat,1), nsolvers * 2)
   for i = 0:(nsolvers - 1)
     data[:, 2 * i + 1] .= x_mat[:, i + 1]
     data[:, 2 * i + 2] .= y_mat[:, i + 1]
