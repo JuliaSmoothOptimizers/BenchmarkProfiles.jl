@@ -43,12 +43,12 @@ function export_performance_profile_tikz(
   T::Matrix{Float64},
   filename::String;
   file_type = TIKZ,
-  solvernames::Vector{String}=String[],
-  xlim::AbstractFloat=10.,
-  ylim::AbstractFloat=10.,
-  nxgrad::Int=5,
-  nygrad::Int=5,
-  grid::Bool=true,
+  solvernames::Vector{String} = String[],
+  xlim::AbstractFloat = 10.0,
+  ylim::AbstractFloat = 10.0,
+  nxgrad::Int = 5,
+  nygrad::Int = 5,
+  grid::Bool = true,
   # markers::Vector{S} = String[],
   colours::Vector{String} = String[],
   linestyles::Vector{String} = String[],
@@ -56,47 +56,48 @@ function export_performance_profile_tikz(
   xlabel::String = "",
   ylabel::String = "",
   axis_tick_length::AbstractFloat = 0.2,
-  lgd_pos::Vector = [xlim+0.5,ylim],
+  lgd_pos::Vector = [xlim + 0.5, ylim],
   lgd_plot_length::AbstractFloat = 0.7,
   lgd_v_offset::AbstractFloat = 0.7,
   lgd_plot_offset::AbstractFloat = 0.1,
-  lgd_box_length::AbstractFloat = 3.,
-  label_val::Vector = [0.2,0.25,0.5,1],
+  lgd_box_length::AbstractFloat = 3.0,
+  label_val::Vector = [0.2, 0.25, 0.5, 1],
   logscale::Bool = true,
-  kwargs...)
+  kwargs...,
+)
+  xlabel_def, ylabel_def, solvernames =
+    performance_profile_axis_labels(solvernames, size(T, 2), logscale; kwargs...)
+  isempty(xlabel) && (xlabel = xlabel_def)
+  isempty(ylabel) && (ylabel = ylabel_def)
 
-  xlabel_def, ylabel_def, solvernames = performance_profile_axis_labels(solvernames, size(T, 2), logscale; kwargs...)
-  isempty(xlabel) && (xlabel=xlabel_def)
-  isempty(ylabel) && (ylabel=ylabel_def)
+  y_grad = collect(0.0:(1.0 / (nygrad - 1)):1.0)
 
-  y_grad = collect(0.:1.0/(nygrad-1):1.0)
+  isempty(colours) && (colours = ["black" for _ = 1:size(T, 2)])
+  isempty(linestyles) && (linestyles = ["solid" for _ = 1:size(T, 2)])
 
-  isempty(colours) && (colours = ["black" for _ =1:size(T,2)])
-  isempty(linestyles) && (linestyles = ["solid" for _ =1:size(T,2)])
-  
-  x_mat, y_mat = BenchmarkProfiles.performance_profile_data_mat(T;kwargs...)
+  x_mat, y_mat = BenchmarkProfiles.performance_profile_data_mat(T; kwargs...)
 
   # get nice looking graduation on x axis
-  xmax , _ = findmax(x_mat[.!isnan.(x_mat)])
-  dist = xmax/(nxgrad-1)
-  n=log.(10,dist./label_val)
+  xmax, _ = findmax(x_mat[.!isnan.(x_mat)])
+  dist = xmax / (nxgrad - 1)
+  n = log.(10, dist ./ label_val)
   _, ind = findmin(abs.(n .- round.(n)))
-  xgrad_dist = label_val[ind]*10^round(n[ind])
-  x_grad = [0. , [xgrad_dist*i for i =1 : nxgrad-1]...]
-  xmax=max(x_grad[end],xmax)
-  
+  xgrad_dist = label_val[ind] * 10^round(n[ind])
+  x_grad = [0.0, [xgrad_dist * i for i = 1:(nxgrad - 1)]...]
+  xmax = max(x_grad[end], xmax)
+
   # get nice looking graduation on y axis
-  dist = 1.0/(nygrad-1)
-  n=log.(10,dist./label_val)
+  dist = 1.0 / (nygrad - 1)
+  n = log.(10, dist ./ label_val)
   _, ind = findmin(abs.(n .- round.(n)))
-  ygrad_dist = label_val[ind]*10^round(n[ind])
-  y_grad = [0. , [ygrad_dist*i for i =1 : nygrad-1]...]
-  ymax=max(y_grad[end],1.0)
-  
+  ygrad_dist = label_val[ind] * 10^round(n[ind])
+  y_grad = [0.0, [ygrad_dist * i for i = 1:(nygrad - 1)]...]
+  ymax = max(y_grad[end], 1.0)
+
   to_int(x) = isinteger(x) ? Int(x) : x
 
-  xratio = xlim/xmax
-  yratio = ylim/ymax
+  xratio = xlim / xmax
+  yratio = ylim / ymax
   io = IOBuffer()
 
   # axes
@@ -107,15 +108,24 @@ function export_performance_profile_tikz(
   # axes graduations and labels,
   if logscale
     for i in eachindex(x_grad)
-      println(io, "\\draw[line width=$linewidth] ($(x_grad[i]*xratio),0) -- ($(x_grad[i]*xratio),$axis_tick_length) node [pos=0, below] {\$2^{$(to_int(x_grad[i]))}\$};")
+      println(
+        io,
+        "\\draw[line width=$linewidth] ($(x_grad[i]*xratio),0) -- ($(x_grad[i]*xratio),$axis_tick_length) node [pos=0, below] {\$2^{$(to_int(x_grad[i]))}\$};",
+      )
     end
   else
     for i in eachindex(x_grad)
-      println(io, "\\draw[line width=$linewidth] ($(x_grad[i]*xratio),0) -- ($(x_grad[i]*xratio),$axis_tick_length) node [pos=0, below] {$(to_int(x_grad[i]))};")
+      println(
+        io,
+        "\\draw[line width=$linewidth] ($(x_grad[i]*xratio),0) -- ($(x_grad[i]*xratio),$axis_tick_length) node [pos=0, below] {$(to_int(x_grad[i]))};",
+      )
     end
   end
   for i in eachindex(y_grad)
-    println(io, "\\draw[line width=$linewidth] (0,$(y_grad[i]*yratio)) -- ($axis_tick_length,$(y_grad[i]*yratio)) node [pos=0, left] {$(to_int(y_grad[i]))};")
+    println(
+      io,
+      "\\draw[line width=$linewidth] (0,$(y_grad[i]*yratio)) -- ($axis_tick_length,$(y_grad[i]*yratio)) node [pos=0, left] {$(to_int(y_grad[i]))};",
+    )
   end
   # grid
   if grid
@@ -123,19 +133,22 @@ function export_performance_profile_tikz(
       println(io, "\\draw[gray] ($(x_grad[i]*xratio),0) -- ($(x_grad[i]*xratio),$ylim);")
     end
     for i in eachindex(y_grad)
-      println(io, "\\draw[gray] (0,$(y_grad[i]*yratio)) -- ($xlim,$(y_grad[i]*yratio)) node [pos=0, left] {$(to_int(y_grad[i]))};")
+      println(
+        io,
+        "\\draw[gray] (0,$(y_grad[i]*yratio)) -- ($xlim,$(y_grad[i]*yratio)) node [pos=0, left] {$(to_int(y_grad[i]))};",
+      )
     end
   end
 
   # profiles
-  for j in eachindex(solvernames) 
+  for j in eachindex(solvernames)
     drawcmd = "\\draw[line width=$linewidth, $(colours[j]), $(linestyles[j]), line width = $linewidth] "
     drawcmd *= "($(x_mat[1,j]*xratio),$(y_mat[1,j]*yratio))"
-    for k in 2:size(x_mat,1)
-      if isnan(x_mat[k,j])
+    for k = 2:size(x_mat, 1)
+      if isnan(x_mat[k, j])
         break
       end
-      if y_mat[k,j] > 1 # for some reasons last point of profile is set with y=1.1 by data function...
+      if y_mat[k, j] > 1 # for some reasons last point of profile is set with y=1.1 by data function...
         drawcmd *= " -- ($(xmax*xratio),$(y_mat[k-1,j]*yratio)) -- ($(xmax*xratio),$(y_mat[k-1,j]*yratio))"
       else
         # if !isempty(markers)
@@ -146,10 +159,10 @@ function export_performance_profile_tikz(
       end
     end
     drawcmd *= ";"
-    println(io,drawcmd)
+    println(io, drawcmd)
   end
   # legend
-  for j in eachindex(solvernames) 
+  for j in eachindex(solvernames)
     legcmd = "\\draw[$(colours[j]), $(linestyles[j]), line width = $linewidth] "
     legcmd *= "($(lgd_pos[1]+lgd_plot_offset),$(lgd_pos[2]-j*lgd_v_offset)) -- ($(lgd_pos[1]+lgd_plot_offset+lgd_plot_length),$(lgd_pos[2]-j*lgd_v_offset)) node [black,pos=1,right] {$(String(solvernames[j]))}"
     # if !isempty(markers)
@@ -157,12 +170,15 @@ function export_performance_profile_tikz(
     # end
     legcmd *= ";"
 
-    println(io,legcmd)
+    println(io, legcmd)
   end
   # legend box
-  println(io,"\\draw[line width=$linewidth] ($(lgd_pos[1]),$(lgd_pos[2])) -- ($(lgd_pos[1]+lgd_box_length),$(lgd_pos[2])) -- ($(lgd_pos[1]+lgd_box_length),$(lgd_pos[2]-lgd_v_offset*(length(solvernames)+1))) -- ($(lgd_pos[1]),$(lgd_pos[2]-lgd_v_offset*(length(solvernames)+1))) -- cycle;")
-  
+  println(
+    io,
+    "\\draw[line width=$linewidth] ($(lgd_pos[1]),$(lgd_pos[2])) -- ($(lgd_pos[1]+lgd_box_length),$(lgd_pos[2])) -- ($(lgd_pos[1]+lgd_box_length),$(lgd_pos[2]-lgd_v_offset*(length(solvernames)+1))) -- ($(lgd_pos[1]),$(lgd_pos[2]-lgd_v_offset*(length(solvernames)+1))) -- cycle;",
+  )
+
   raw_code = String(take!(io))
   tp = TikzPicture(raw_code)
-  save(file_type(filename),tp)
+  save(file_type(filename), tp)
 end
