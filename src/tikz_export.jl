@@ -1,11 +1,7 @@
-using TikzPictures
-
-export export_performance_profile_tikz
-
 """
     function export_performance_profile_tikz(T, filename; kwargs...)
 
-Export tikz figure of the performance profiles given by `T` in `filename`.
+Export tikz-generated figure of the performance profiles given by `T` in `filename`.
 
 ## Arguments
 

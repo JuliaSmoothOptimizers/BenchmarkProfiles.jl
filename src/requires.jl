@@ -181,4 +181,8 @@ function __init__()
       return profile
     end
   end
+
+  @require TikzPictures = "37f6aa50-8035-52d0-81c2-5a1d08754b2d" begin
+    include("tikz_export.jl")
+  end
 end
