@@ -75,7 +75,7 @@ function export_performance_profile_tikz(
   isempty(colours) && (colours = ["black" for _ = 1:size(T, 2)])
   isempty(linestyles) && (linestyles = ["solid" for _ = 1:size(T, 2)])
 
-  x_mat, y_mat = BenchmarkProfiles.performance_profile_data_mat(T; kwargs...)
+  x_mat, y_mat = BenchmarkProfiles.performance_profile_data_mat(T; logscale=logscale, kwargs...)
 
   # get nice looking graduation on x axis
   xmax, _ = findmax(x_mat[.!isnan.(x_mat)])
