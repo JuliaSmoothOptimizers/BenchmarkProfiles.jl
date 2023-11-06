@@ -77,16 +77,16 @@ if !Sys.isfreebsd() # GR_jll not available, so Plots won't install
   @testset "tikz export" begin
     T = 10 * rand(25, 3)
     filename = "tikz_fig"
-    BenchmarkProfiles.export_performance_profile_tikz(T, filename)
+    export_performance_profile_tikz(T, filename)
     @test isfile(filename * ".tikz")
     rm(filename * ".tikz")
-    BenchmarkProfiles.export_performance_profile_tikz(T, filename, file_type = TEX)
+    export_performance_profile_tikz(T, filename, file_type = TEX)
     @test isfile(filename * ".tex")
     rm(filename * ".tex")
-    BenchmarkProfiles.export_performance_profile_tikz(T, filename, file_type = SVG)
+    export_performance_profile_tikz(T, filename, file_type = SVG)
     @test isfile(filename * ".svg")
     rm(filename * ".svg")
-    BenchmarkProfiles.export_performance_profile_tikz(T, filename, file_type = PDF)
+    export_performance_profile_tikz(T, filename, file_type = PDF)
     @test isfile(filename * ".pdf")
     rm(filename * ".pdf")
   end
