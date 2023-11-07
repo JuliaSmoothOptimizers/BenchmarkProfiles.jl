@@ -29,9 +29,7 @@ for backend ∈ bp_backends
   end
 end
 
-@eval begin
   export_performance_profile_tikz(args...;kwargs...) = error("Please load TikzPictures.jl package to access this function.")
-end
 
 include("performance_profiles.jl")
 include("data_profiles.jl")
