@@ -159,6 +159,12 @@ function export_performance_profile_tikz(
     drawcmd *= ";"
     println(io, drawcmd)
   end
+
+  # legend box
+  println(
+    io,
+    "\\draw[line width=$linewidth,fill=white] ($(lgd_pos[1]),$(lgd_pos[2])) rectangle ($(lgd_pos[1]+lgd_box_length),$(lgd_pos[2]-lgd_v_offset*(length(solvernames)+1)));",
+  )
   # legend
   for j in eachindex(solvernames)
     legcmd = "\\draw[$(colours[j]), $(linestyles[j]), line width = $linewidth] "
@@ -170,11 +176,6 @@ function export_performance_profile_tikz(
 
     println(io, legcmd)
   end
-  # legend box
-  println(
-    io,
-    "\\draw[line width=$linewidth] ($(lgd_pos[1]),$(lgd_pos[2])) -- ($(lgd_pos[1]+lgd_box_length),$(lgd_pos[2])) -- ($(lgd_pos[1]+lgd_box_length),$(lgd_pos[2]-lgd_v_offset*(length(solvernames)+1))) -- ($(lgd_pos[1]),$(lgd_pos[2]-lgd_v_offset*(length(solvernames)+1))) -- cycle;",
-  )
 
   raw_code = String(take!(io))
   tp = TikzPicture(raw_code)
