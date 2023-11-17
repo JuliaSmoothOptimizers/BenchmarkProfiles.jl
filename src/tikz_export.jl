@@ -1,5 +1,3 @@
-using TikzPictures
-
 """
     function export_performance_profile_tikz(T, filename; kwargs...)
 
