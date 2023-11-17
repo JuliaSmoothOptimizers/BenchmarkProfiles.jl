@@ -38,7 +38,7 @@ Other keyword arguments are passed to `performance_profile_data`.
 function export_performance_profile_tikz(
   T::Matrix{Float64},
   filename::String;
-  file_type = TIKZ,
+  file_type = TikzPictures.TIKZ,
   solvernames::Vector{String} = String[],
   xlim::AbstractFloat = 10.0,
   ylim::AbstractFloat = 10.0,
@@ -176,6 +176,6 @@ function export_performance_profile_tikz(
   end
 
   raw_code = String(take!(io))
-  tp = TikzPicture(raw_code)
-  save(file_type(filename), tp)
+  tp = TikzPictures.TikzPicture(raw_code)
+  TikzPictures.save(file_type(filename), tp)
 end
