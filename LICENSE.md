@@ -1,4 +1,4 @@
-Copyright (c) 2016-2019: Dominique Orban
+Copyright (c) 2016-present: Dominique Orban
 
 BenchmarkProfiles.jl is licensed under the [MPL version 2.0](https://www.mozilla.org/MPL/2.0/).
 
