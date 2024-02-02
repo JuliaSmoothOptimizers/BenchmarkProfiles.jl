@@ -14,9 +14,9 @@ authors:
     family-names: Orban
     email: dominique.orban@gerad.ca
     affiliation: >-
-      GERAD and Department of Mathematics and            
-      Industrial Engineering, Polytechnique
-      Montréal,             QC, Canada
+      GERAD and Department of Mathematics and      
+      Industrial Engineering, Polytechnique Montréal,      
+      QC, Canada
     orcid: 'https://orcid.org/0000-0002-8017-7687'
   - given-names: contributors
 identifiers:
@@ -25,6 +25,5 @@ identifiers:
 repository-code: >-
   https://github.com/JuliaSmoothOptimizers/BenchmarkProfiles.jl
 license: MPL-2.0
-commit: ccf20e9027f6d67053a4ae3bb65b2c434d96cc41
 version: 0.4.4
 date-released: '2023-10-19'
