@@ -1,0 +1,29 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: >-
+  BenchmarkProfiles.jl: A Simple Julia Package to Plot
+  Performance and Data Profiles
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Dominique
+    family-names: Orban
+    email: dominique.orban@gerad.ca
+    affiliation: >-
+      GERAD and Department of Mathematics and      
+      Industrial Engineering, Polytechnique Montréal,      
+      QC, Canada
+    orcid: 'https://orcid.org/0000-0002-8017-7687'
+  - given-names: contributors
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.4630955
+repository-code: >-
+  https://github.com/JuliaSmoothOptimizers/BenchmarkProfiles.jl
+license: MPL-2.0
+version: 0.4.4
+date-released: '2023-10-19'
