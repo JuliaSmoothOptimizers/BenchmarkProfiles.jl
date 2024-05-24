@@ -38,6 +38,17 @@ end
   @test isa(profile, Plot{BrailleCanvas{typeof(identity), typeof(identity)}, Val{false}, Bool})
 end
 
+@testset "Integer data" begin
+  using UnicodePlots
+  T = convert(Array{Int, 2}, floor.(100 * rand(25, 3) .+ 1))
+  labels = ["a", "b", "c"]
+  profile = performance_profile(UnicodePlotsBackend(), T, labels)
+  @test isa(
+    profile,
+    UnicodePlots.Plot{BrailleCanvas{typeof(identity), typeof(identity)}, Val{false}, Bool},
+  )
+end
+
 if !Sys.isfreebsd() # GR_jll not available, so Plots won't install
   @testset "Plots" begin
     using Plots

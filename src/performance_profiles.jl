@@ -6,8 +6,6 @@
 
 using CSV, Tables
 
-using CSV, Tables
-
 """Compute performance ratios used to produce a performance profile.
 
 There is normally no need to call this function directly.
@@ -45,12 +43,8 @@ function performance_ratios(T::Array{Float64, 2}; logscale::Bool = true, drawtol
   return (r, max_ratio)
 end
 
-performance_ratios(
-  T::Array{Td, 2};
-  logscale::Bool = true,
-  drawtol::Float64 = 0.0,
-) where {Td <: Number} =
-  performance_ratios(convert(Array{Float64, 2}, T), logscale = logscale, drawtol = drawtol)
+performance_ratios(T::Array{Td, 2}; kwargs...) where {Td <: Number} =
+  performance_ratios(convert(Array{Float64, 2}, T); kwargs...)
 
 """Produce the coordinates for a performance profile.
 
@@ -98,6 +92,9 @@ function performance_profile_data(
   return (x_plot, y_plot, max_ratio)
 end
 
+performance_profile_data(T::Array{Td, 2}; kwargs...) where {Td <: Number} =
+  performance_profile_data(convert(Array{Float64, 2}, T); kwargs...)
+
 function performance_profile_axis_labels(labels, ns, logscale; kwargs...)
   length(labels) == 0 && (labels = ["column $col" for col = 1:ns])
   kwargs = Dict{Symbol, Any}(kwargs)
@@ -115,7 +112,7 @@ Produce a performance profile using the specified backend.
 ## Arguments
 
 * `b :: AbstractBackend`: the backend used to produce the plot.
-* `T :: Matrix{Float64}`: each column of `T` defines the performance data for a solver (smaller is better).
+* `T :: Matrix{<: Number}`: each column of `T` defines the performance data for a solver (positive, and smaller is better).
   Failures on a given problem are represented by a negative value, an infinite value, or `NaN`.
 * `labels :: Vector{AbstractString}`: a vector of labels for each profile used to produce a legend.
   If empty, `labels` will be set to `["column 1", "column 2", ...]`.
@@ -132,14 +129,14 @@ Other keyword arguments are passed to the plot command for the corresponding bac
 """
 function performance_profile(
   b::AbstractBackend,
-  T::Matrix{Float64},
+  T::Matrix{Td},
   labels::Vector{S} = String[];
   logscale::Bool = true,
   title::AbstractString = "",
   sampletol::Float64 = 0.0,
   drawtol::Float64 = 0.0,
   kwargs...,
-) where {S <: AbstractString}
+) where {Td <: Number, S <: AbstractString}
   xlabel, ylabel, labels = performance_profile_axis_labels(labels, size(T, 2), logscale; kwargs...)
   (x_plot, y_plot, max_ratio) =
     performance_profile_data(T, logscale = logscale, sampletol = sampletol, drawtol = drawtol)
@@ -181,7 +178,7 @@ Export a performance profile plot data as .csv file. Profiles data are padded wi
 
 ## Arguments
 
-* `T :: Matrix{Float64}`: each column of `T` defines the performance data for a solver (smaller is better).
+* `T :: Matrix{<: Number}`: each column of `T` defines the performance data for a solver (positive, and smaller is better).
   Failures on a given problem are represented by a negative value, an infinite value, or `NaN`.
 * `filename :: String` : path to the exported file.
 
