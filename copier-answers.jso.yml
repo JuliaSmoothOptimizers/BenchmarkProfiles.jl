@@ -1,0 +1,8 @@
+PackageName: "BenchmarkProfiles"
+PackageOwner: "JuliaSmoothOptimizers"
+PackageUUID: "ecbce9bc-3e5e-569d-9e29-55181f61f8d0"
+_src_path: "https://github.com/JuliaSmoothOptimizers/JSOBestieTemplate.jl"
+_commit: "v0.13.0"
+AddBreakage: true
+AddBenchmark: false
+AddBenchmarkCI: true
