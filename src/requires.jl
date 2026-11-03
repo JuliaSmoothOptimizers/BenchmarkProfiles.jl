@@ -135,25 +135,44 @@ function __init__()
     )
       kwargs = Dict{Symbol, Any}(kwargs)
       linestyles = pop!(kwargs, :linestyles, Symbol[])
-      profile = Plots.plot(
-        xlabel = xlabel,
-        ylabel = ylabel,
-        title = title,
-        xlims = (logscale ? 0.0 : 1.0, 1.1 * max_ratio),
-        ylims = (0, 1.1),
-      )  # initial plot
+      length(linestyles) > 0 && (@warn "linestyles are not yet supported")
+
+      # We cannot use the @pgf macro here because Julia tries to expand it
+      # while parsing this code before PGFPlotsX is loaded, which results
+      # in erors.
+
+      profile = PGFPlotsX.Axis(
+        PGFPlotsX.Options(
+          "xmode" => "normal",
+          "xmin" => logscale ? 0.0 : 1.0,
+          "xmax" => round(max_ratio, digits = 1),
+          "ymin" => 0.0,
+          "ymax" => 1.1,
+          "xticklabel" =>
+            logscale ? raw"$2^{\pgfmathprintnumber\tick}$" : raw"$\pgfmathprintnumber\tick$",
+          "xmajorgrids" => true,
+          "ymajorgrids" => true,
+          "xlabel" => xlabel,
+          "ylabel" => ylabel,
+          "title" => title,
+          "legend pos" => "south east",
+          "width" => "16cm",
+          "height" => "9cm",
+          kwargs...,
+        ),
+      )
       for s = 1:length(labels)
-        if length(linestyles) > 0
-          kwargs[:linestyle] = linestyles[s]
+        if length(y_plot[s]) > 1
+          y_plot[s][end] = y_plot[s][end - 1]
         end
-        Plots.plot!(x_plot[s], y_plot[s], t = :steppost, label = labels[s]; kwargs...)  # add to initial plot
-      end
-      if logscale
-        for xt in Plots.xticks(profile)
-          xtL = [L"2^{%$str_xt}" for str_xt in xt[2]]
-          Plots.plot!(xticks = (xt[1], xtL))
-          Plots.plot!(xtickfontsize = 10)
-        end
+        push!(
+          profile,
+          PGFPlotsX.PlotInc(
+            PGFPlotsX.Options("const plot" => true, "no marks" => true, "mark" => "none"),
+            PGFPlotsX.Coordinates(x_plot[s], y_plot[s]),
+          ),
+        )
+        push!(profile, PGFPlotsX.LegendEntry(labels[s]))
       end
       return profile
     end
@@ -169,15 +188,37 @@ function __init__()
       title;
       kwargs...,
     )
-      profile = Plots.plot()  # initial empty plot
+      kwargs = Dict{Symbol, Any}(kwargs)
+      linestyles = pop!(kwargs, :linestyles, Symbol[])
+      length(linestyles) > 0 && (@warn "linestyles are not yet supported")
+
+      profile = PGFPlotsX.Axis(
+        PGFPlotsX.Options(
+          "xmin" => 0.0,
+          "xmax" => 1.1 * max_data,
+          "ymin" => 0.0,
+          "ymax" => 1.1,
+          "xmajorgrids" => true,
+          "ymajorgrids" => true,
+          "xlabel" => xlabel,
+          "ylabel" => ylabel,
+          "title" => title,
+          "legend pos" => "south east",
+          "width" => "16cm",
+          "height" => "9cm",
+          kwargs...,
+        ),
+      )  # initial empty plot
       for s = 1:size(T, 2)
-        Plots.plot!(T[:, s], xs, t = :steppost, label = labels[s]; kwargs...)
+        push!(
+          profile,
+          PGFPlotsX.PlotInc(
+            PGFPlotsX.Options("const plot" => true, "no marks" => true, "mark" => "none"),
+            PGFPlotsX.Coordinates(T[:, s], xs),
+          ),
+        )
+        push!(profile, PGFPlotsX.LegendEntry(labels[s]))
       end
-      Plots.xlims!(0.0, 1.1 * max_data)
-      Plots.ylims!(0, 1.1)
-      Plots.xlabel!(xlabel)
-      Plots.ylabel!(ylabel)
-      Plots.title!(title)
       return profile
     end
   end
