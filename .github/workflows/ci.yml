@@ -13,20 +13,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: ['1.6', '1']
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        version: ['lts', '1']
+        os: [ubuntu-latest, macos-latest, windows-latest]
         arch: [x64]
         allow_failure: [false]
         include:
-          - version: 'nightly'
+          - version: 'pre'
             os: ubuntu-latest
             arch: x64
             allow_failure: true
-          - version: 'nightly'
+          - version: 'pre'
             os: macOS-latest
             arch: x64
             allow_failure: true
-          - version: 'nightly'
+          - version: 'pre'
             os: windows-latest
             arch: x64
             allow_failure: true
