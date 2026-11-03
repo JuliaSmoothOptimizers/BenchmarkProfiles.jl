@@ -63,15 +63,16 @@ if !Sys.isfreebsd() # GR_jll not available, so Plots won't install
   end
 
   @testset "PGFPlotsX" begin
+    using PGFPlotsX
     T = 10 * rand(25, 3)
     labels = ["a", "b", "c"]
     pgfplotsx()
     profile = performance_profile(PGFPlotsXBackend(), T, labels, linestyles = [:solid, :dash, :dot])
-    @test isa(profile, Plots.Plot)
+    @test isa(profile, PGFPlotsX.Axis)
     H = rand(25, 4, 3)
     T = ones(10)
     profile = data_profile(PGFPlotsXBackend(), H, T, labels)
-    @test isa(profile, Plots.Plot)
+    @test isa(profile, PGFPlotsX.Axis)
   end
 
   @testset "csv export" begin
