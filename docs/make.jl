@@ -1,4 +1,6 @@
 using Documenter, BenchmarkProfiles
+# defines `export_performance_profile_tikz`, so that its docstring is in the reference
+using TikzPictures
 
 makedocs(
   modules = [BenchmarkProfiles],
