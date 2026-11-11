@@ -4,6 +4,10 @@ function __init__()
     Keyword arguments specific to the `PlotsBackend` backend:
 
     * `linestyles::Vector{Symbol}`: a list of line styles.
+
+    Other keyword arguments are passed to `Plots.plot!` for each solver. To give each solver
+    its own color, use `palette` (for example `palette = [:black, :red, :blue]`); a single
+    `color` applies to every line.
     """
     performance_profile
 
