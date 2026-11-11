@@ -45,6 +45,25 @@ Currently supported backends are:
 Backends are treated as optional dependencies, but one is required to produce a plot.
 The user should import one of the supported backends before calling one of the plotting functions.
 
+## Exporting to TikZ
+
+[`export_performance_profile_tikz`](@ref) writes a performance profile as a TikZ picture, to
+include in a LaTeX document. It is available once [TikzPictures.jl](https://github.com/JuliaTeX/TikzPictures.jl)
+is loaded, and does not need a plotting backend:
+
+```julia
+julia> using BenchmarkProfiles, TikzPictures
+julia> T = 10 * rand(25, 3);  # 25 problems, 3 solvers
+julia> export_performance_profile_tikz(T, "profile"; solvernames = ["Solver 1", "Solver 2", "Solver 3"])
+```
+
+This writes the TikZ code to `profile.tikz`, ready to `\input` in a document.
+With `file_type = TEX` it writes a standalone `profile.tex` instead, and with
+`file_type = PDF` or `file_type = SVG` a compiled figure. TikzPictures.jl compiles it with `lualatex`,
+or with the Tectonic engine it ships when `lualatex` is not installed.
+The colours, line styles, size of the figure and position of the legend are keyword arguments;
+see [`export_performance_profile_tikz`](@ref) for all of them.
+
 ## Adding a New Backend
 
 In order to add a new backend, there are two steps:
