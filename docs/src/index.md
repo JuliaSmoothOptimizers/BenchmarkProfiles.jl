@@ -34,6 +34,24 @@ julia> performance_profile(PlotsBackend(), T, ["Solver 1", "Solver 2", "Solver 3
 
 ![Performance Profile](assets/random_profile.png)
 
+## Colors and line styles
+
+Keyword arguments that the functions don't use themselves are passed on to the backend.
+With Plots.jl, each solver is drawn by a separate call to `plot!` with the same keyword
+arguments, so `color = :red`, or even `color = [:red :blue :green]`, colors every line red.
+To give each solver its own color, set the `palette`, whose colors the lines take in turn:
+
+```julia
+julia> using BenchmarkProfiles, Plots
+julia> T = 10 * rand(25, 3);  # 25 problems, 3 solvers
+julia> performance_profile(PlotsBackend(), T, ["Solver 1", "Solver 2", "Solver 3"],
+                           palette = [:black, :red, :blue], linestyles = [:solid, :dash, :dot])
+```
+
+`palette` also accepts the name of a color scheme, such as `palette = :tab10`, and works the
+same way for `data_profile`. `linestyles`, specific to `performance_profile` with
+`PlotsBackend`, gives each solver its own line style.
+
 ## Supported Backends
 
 Currently supported backends are:
